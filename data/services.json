@@ -155,7 +155,7 @@
       "streams": "최대 4대(프리미엄)", "streams_max": 4,
       "plans": [
         {"name": "스탠다드", "price": 9900, "feat": "FHD · 동시 2대 · 연간 99,000원"},
-        {"name": "프리미엄", "price": 13900, "feat": "4K UHD·HDR · 동시 4대 · 연간 139,000원", "check": true}
+        {"name": "프리미엄", "price": 13900, "feat": "4K UHD·HDR · 동시 4대 · 연간 139,000원"}
       ],
       "quick": {
         "cheapest": "연간 결제(스탠다드 99,000원, 월 8,250원꼴)가 기본 절약법이고, 연간 이용권 할인 프로모션이 열릴 때 사면 더 쌉니다.",
@@ -167,7 +167,7 @@
          "desc": "월 결제 12개월(118,800원)보다 약 17% 저렴합니다. 프리미엄은 연 139,000원입니다."},
         {"type": "promo", "title": "연간 이용권 할인 프로모션", "cost": "예: 연간 40% 할인", "cond": "기간 한정", "stab": "mid",
          "desc": "연간 이용권을 할인하는 프로모션이 종종 열립니다(2026년 9월 예: 스탠다드 연 59,400원). 기간이 짧으니 결제 전 공식 사이트에서 진행 여부를 확인하세요."},
-        {"type": "bundle", "title": "티빙 결합 이용권", "cost": "티빙+디즈니+ 18,000원 · 3 PACK 21,500원", "cond": "티빙 웹에서 가입(인앱 불가)", "stab": "high",
+        {"type": "bundle", "title": "티빙 결합 이용권", "cost": "티빙+디즈니+ 18,000원 · 3 PACK 21,500원", "cond": "티빙 웹 또는 디즈니+ 웹에서 가입", "stab": "high",
          "desc": "티빙 스탠다드와 디즈니+ 스탠다드를 묶은 더블 이용권, 웨이브까지 더한 3 PACK이 있습니다."},
         {"type": "carrier", "title": "통신사 제휴", "cost": "상품별 상이", "cond": "통신사 구독 상품 가입", "stab": "mid",
          "desc": "통신사 구독 상품에 디즈니+가 포함된 경우가 있으니 쓰고 있는 통신사 혜택을 먼저 확인하세요."},
@@ -307,13 +307,16 @@
     {
       "id": "spotify", "cat": "music", "name": "스포티파이", "short": "글로벌 음악·팟캐스트, 무료 요금제",
       "official_url": "https://www.spotify.com/kr-ko/premium/",
-      "source_url": "https://help.naver.com/service/23168/contents/24787", "source_note": "스포티파이 요금 안내·네이버플러스 멤버십 FAQ",
+      "source_url": "https://www.spotify.com/kr-ko/premium/", "source_note": "스포티파이 프리미엄 요금 안내(부가세 포함)",
       "verified_at": "2026-09-29",
-      "summary": "글로벌 음악과 팟캐스트, 추천 기능이 강점인 음악 스트리밍입니다. 한국에도 광고 기반 무료 요금제가 있고, 네이버플러스 멤버십 혜택으로도 이용할 수 있습니다.",
+      "summary": "글로벌 음악과 팟캐스트, 추천 기능이 강점인 음악 스트리밍입니다. 한국에도 광고 기반 무료 요금제가 있고, 유료는 베이직·개인·듀오·학생 네 가지이며 네이버플러스 멤버십 혜택으로도 이용할 수 있습니다.",
       "streams": "계정당 1대(개인)", "streams_max": 1,
       "plans": [
         {"name": "무료", "price": 0, "ads": true, "feat": "광고 포함 · 일부 음원·기능 제한"},
-        {"name": "프리미엄(개인)", "price": null, "feat": "광고 없음 · 오프라인 저장 · 가격은 공식 페이지 확인", "check": true},
+        {"name": "프리미엄 베이직", "price": 8690, "feat": "광고 없음 · 다운로드 불가"},
+        {"name": "프리미엄 개인", "price": 11990, "feat": "광고 없음 · 오프라인 저장 · 무손실 오디오"},
+        {"name": "프리미엄 듀오", "price": 17985, "feat": "같은 주소지 2명 · 계정 2개 · 오프라인 저장"},
+        {"name": "프리미엄 학생", "price": 6600, "feat": "인증된 대학생 · 최대 4년 · 오프라인 저장"},
         {"name": "네이버플러스 멤버십 혜택", "price": 4900, "kind": "bundle", "feat": "멤버십 디지털 혜택으로 선택 · 광고 없음 · 무손실 음원·다운로드 불가"}
       ],
       "quick": {
@@ -327,10 +330,16 @@
          "source": "https://help.naver.com/service/23168/contents/24787"},
         {"type": "official", "title": "무료 요금제", "cost": "무료", "cond": "광고 시청, 일부 기능 제한", "stab": "high",
          "desc": "광고와 기능 제한을 감수할 수 있다면 비용 없이 쓸 수 있습니다."},
+        {"type": "official", "title": "프리미엄 베이직 선택", "cost": "월 8,690원", "cond": "다운로드·오프라인 저장 불필요", "stab": "high",
+         "desc": "개인 요금제(월 11,990원)보다 월 3,300원 저렴합니다. 광고 없이 듣되 음악을 저장하지 않는다면 충분합니다."},
+        {"type": "official", "title": "학생 요금제", "cost": "월 6,600원", "cond": "승인된 대학 재학생, 최대 4년", "stab": "high",
+         "desc": "대학생 인증을 하면 개인 요금제 기능을 절반 가까운 가격에 씁니다."},
+        {"type": "sharing_official", "title": "듀오 요금제", "cost": "월 17,985원(2명)", "cond": "같은 주소지에 사는 2명", "stab": "high",
+         "desc": "개인 요금제 두 개(23,980원)보다 월 5,995원 저렴하고 각자 계정을 따로 씁니다."},
         {"type": "promo", "title": "신규 가입 무료 체험", "cost": "기간 한정 무료", "cond": "처음 가입하는 계정", "stab": "mid",
          "desc": "신규 가입자 대상 무료 체험·할인 프로모션이 수시로 열립니다. 체험 종료 전 해지하지 않으면 자동 결제됩니다."}
       ],
-      "sharing": "개인 요금제는 한 사람용입니다. 요금제 종류와 공유 가능 여부는 공식 페이지에서 확인하세요.",
+      "sharing": "개인·베이직·학생 요금제는 한 사람용입니다. 같은 주소지에 사는 두 사람은 듀오 요금제(월 17,985원)로 각자 계정을 쓸 수 있습니다.",
       "sharing_platform": false,
       "cancel": {
         "web": ["spotify.com에 로그인해 '계정'으로 이동합니다.", "'구독 관리'를 누릅니다.", "'프리미엄 취소' 또는 '요금제 변경'을 선택합니다."],
@@ -353,9 +362,10 @@
       "streams": "개인 1인", "streams_max": 1,
       "plans": [
         {"name": "Free", "price": 0, "feat": "기본 모델 · 사용량 제한"},
-        {"name": "Plus", "usd": 20, "feat": "상위 모델·기능 · 더 많은 사용량", "check": true},
-        {"name": "Pro", "usd": 200, "feat": "최상위 모델 · 최대 사용량", "check": true},
-        {"name": "Business(팀)", "price": null, "feat": "좌석(사용자)당 과금 · 관리 기능", "check": true}
+        {"name": "Plus", "usd": 20, "feat": "상위 모델·기능 · 더 많은 사용량 · 연간 결제 없음"},
+        {"name": "Pro 5x", "usd": 100, "feat": "Plus 대비 5배 사용량 · Pro 모델·Codex"},
+        {"name": "Pro 20x", "usd": 200, "feat": "Plus 대비 20배 사용량 · 2026년 9월 10일부터 신규 가입 일시 중단"},
+        {"name": "Business(팀)", "price": null, "feat": "좌석당 월 $25(연간 결제 시 $20) · 최소 2좌석 · 관리 기능"}
       ],
       "plans_note": "달러 가격에 부가세(10%)가 별도로 붙을 수 있으며 카드 해외 결제 수수료가 추가됩니다.",
       "quick": {
@@ -395,9 +405,9 @@
       "streams": "개인 1인", "streams_max": 1,
       "plans": [
         {"name": "Free", "price": 0, "feat": "기본 사용 · 사용량 제한"},
-        {"name": "Pro", "usd": 20, "feat": "더 많은 사용량 · 연간 결제 시 월 $17", "check": true},
-        {"name": "Max 5x", "usd": 100, "feat": "Pro 대비 5배 사용량", "check": true},
-        {"name": "Max 20x", "usd": 200, "feat": "Pro 대비 20배 사용량", "check": true}
+        {"name": "Pro", "usd": 20, "feat": "더 많은 사용량 · Claude Code 포함 · 연간 결제 시 월 $17($200 선결제)"},
+        {"name": "Max 5x", "usd": 100, "feat": "Pro 대비 5배 사용량 · 월 결제만"},
+        {"name": "Max 20x", "usd": 200, "feat": "Pro 대비 20배 사용량 · 월 결제만"}
       ],
       "plans_note": "달러 가격에 부가세가 별도로 붙을 수 있으며 카드 해외 결제 수수료가 추가됩니다.",
       "quick": {
@@ -436,8 +446,8 @@
       "streams": "개인 1인(저장공간은 가족 공유 가능)", "streams_max": 1,
       "plans": [
         {"name": "무료", "price": 0, "feat": "기본 Gemini"},
-        {"name": "Google AI Pro", "price": 29000, "feat": "상위 모델·기능 · Google One 2TB 저장공간 포함", "check": true},
-        {"name": "Google AI Ultra", "price": null, "feat": "최상위 기능 · 가격은 공식 페이지 확인", "check": true}
+        {"name": "Google AI Pro", "price": 29000, "feat": "상위 모델·기능 · 저장공간 5TB 포함 · 연간 결제 할인 행사 수시", "check": true},
+        {"name": "Google AI Ultra", "price": null, "feat": "최상위 기능 · 저장공간 20TB~30TB · 가격은 공식 페이지 확인", "check": true}
       ],
       "quick": {
         "cheapest": "무료 Gemini로 충분한지 먼저 확인하고, 신규 무료 체험 기간을 활용하세요.",
@@ -445,7 +455,7 @@
         "shared": "Google One 저장공간은 가족 그룹(최대 5명)과 공유할 수 있습니다."
       },
       "discounts": [
-        {"type": "bundle", "title": "저장공간 결제 통합", "cost": "AI Pro에 2TB 포함", "cond": "Google One 저장공간 사용자", "stab": "high",
+        {"type": "bundle", "title": "저장공간 결제 통합", "cost": "AI Pro에 5TB 포함", "cond": "Google One 저장공간 사용자", "stab": "high",
          "desc": "사진·드라이브 용량 때문에 Google One을 결제 중이라면 AI Pro로 바꿔 두 비용을 하나로 합칠 수 있습니다."},
         {"type": "promo", "title": "신규 무료 체험", "cost": "기간 한정 무료", "cond": "처음 가입하는 계정", "stab": "mid",
          "desc": "신규 가입자 대상 무료 체험이 제공되는 경우가 많습니다. 체험 종료 전 해지하지 않으면 자동 결제됩니다."},
@@ -510,10 +520,10 @@
       "summary": "고품질 이미지 생성에 특화된 AI 서비스입니다. 요금제는 생성 속도·사용량(GPU 시간) 기준으로 나뉘며 연간 결제가 약 20% 저렴합니다.",
       "streams": "개인 1인", "streams_max": 1,
       "plans": [
-        {"name": "Basic", "usd": 10, "feat": "입문용 사용량", "check": true},
-        {"name": "Standard", "usd": 30, "feat": "더 많은 고속 생성 · 느린 모드 무제한", "check": true},
-        {"name": "Pro", "usd": 60, "feat": "대량 생성 · 스텔스 모드", "check": true},
-        {"name": "Mega", "usd": 120, "feat": "최대 사용량", "check": true}
+        {"name": "Basic", "usd": 10, "feat": "고속 생성 월 3.3시간 · 연간 결제 시 월 $8"},
+        {"name": "Standard", "usd": 30, "feat": "고속 월 15시간 · 이미지 느린 모드 무제한 · 연간 시 월 $24"},
+        {"name": "Pro", "usd": 60, "feat": "고속 월 30시간 · 스텔스 모드 · 연간 시 월 $48"},
+        {"name": "Mega", "usd": 120, "feat": "고속 월 60시간 · 스텔스 모드 · 연간 시 월 $96"}
       ],
       "quick": {
         "cheapest": "Basic으로 시작해 한 달 사용량을 본 뒤 필요할 때만 올리세요.",
