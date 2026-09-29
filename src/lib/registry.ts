@@ -39,8 +39,8 @@ export function cancelMeta(s: Service): Meta {
 }
 
 export function couponMeta(key: string, a: Affiliate): Meta {
-  return { path: `/coupons/${key}/`, title: `${a.name} 프로모션 코드·할인 | ${BRAND}`,
-    desc: `${a.name} 프로모션 코드 적용 방법, 코드 오류 해결, 이용 전 리스크를 정리했습니다.` };
+  return { path: `/coupons/${key}/`, title: `${a.name} 할인코드·프로모션 코드 | ${BRAND}`,
+    desc: `${a.name} 할인코드(프로모션 코드) 적용 방법, 코드 오류 해결, 이용 전 리스크를 정리했습니다.` };
 }
 
 /** 쿠폰 페이지를 만드는 제휴 프로그램 (kind=sharing_platform) */
