@@ -1,0 +1,25 @@
+---
+// 가이드 글: /guides/<slug>/  (src/content/guides/*.mdx)
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import AdSlot from '../../../components/AdSlot.astro';
+import Faq from '../../../components/Faq.astro';
+import { TODAY, articleLd, faqLd } from '../../../lib/data';
+import { sorted } from '../../../lib/registry';
+
+export async function getStaticPaths() {
+  return (await sorted('guides')).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const path = `/guides/${entry.id}/`;
+---
+<Base path={path} title={d.title} desc={d.desc} crumbs={[['가이드', '/guides/'], [d.h1, path]]} ld={[...articleLd(d.h1, d.desc, path), ...faqLd(d.faq)]} disclosure={d.disclosure}>
+<article class="doc"><h1>{d.h1}</h1><p class="meta">업데이트: {TODAY}</p><p class="lead">{d.intro}</p>
+<AdSlot pos="top" />
+<Content />
+<Faq items={d.faq} />
+</article>
+</Base>

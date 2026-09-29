@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import { META, sorted } from '../../lib/registry';
+
+const m = META.guidesIndex;
+const items = await sorted('guides');
+---
+<Base path={m.path} title={m.title} desc={m.desc} crumbs={[['가이드', m.path]]} ads={false}>
+<article class="doc"><h1>구독료 절약 가이드</h1><p class="lead">결제 경로, 해지·환불, 해외 결제처럼 서비스를 가리지 않고 구독료에 영향을 주는 내용을 정리했습니다.</p><ul class="list">
+{items.map((g) => <li><a href={`/guides/${g.id}/`}>{g.data.h1}</a>{' '}<span class="muted">{g.data.intro}</span></li>)}
+</ul></article>
+</Base>

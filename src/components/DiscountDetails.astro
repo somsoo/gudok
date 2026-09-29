@@ -1,0 +1,29 @@
+---
+// 서비스 허브: 방법별 상세. affiliates.json placements 에 맞는 제휴 버튼이 자동으로 붙는다.
+import Ext from './Ext.astro';
+import Go from './Go.astro';
+import { couponLive, placementsFor, type Service } from '../lib/data';
+
+interface Props { s: Service }
+const { s } = Astro.props;
+const gamsgoLive = Boolean(s.sharing_platform) && couponLive('gamsgo');
+const blocks = s.discounts.map((d) => {
+  const ctas = placementsFor(s.id, d.type);
+  return {
+    d,
+    ctas,
+    notes: ctas.filter(({ a }) => a.disclosure).map(({ a }) => a.disclosure).join(' '),
+    cls: d.type === 'warning' || d.type === 'sharing_platform' ? 'method warn' : 'method',
+  };
+});
+---
+{blocks.map(({ d, ctas, notes, cls }) => (
+<div class={cls}><h3>{d.title}</h3><p>{d.desc}{d.source && <Fragment>{' '}<span class="muted">(<Ext url={d.source} label="출처" />)</span></Fragment>}</p>
+{d.type === 'sharing_platform' && (
+<p class="muted">더 알아보기: <a href="/guides/sharing-platform-checklist/">공유 플랫폼 이용 전 체크리스트</a>{gamsgoLive && <Fragment>{' · '}<a href="/coupons/gamsgo/">겜스고 프로모션 코드</a></Fragment>}</p>
+)}
+{ctas.length > 0 && (
+<Fragment><p>{ctas.map(({ key, a, pl }, i) => <Fragment>{i > 0 && ' '}<Go k={key} label={pl.label || a.cta_label || `${a.name} 바로가기`} /></Fragment>)}</p><p class="muted">{`제휴 링크입니다. ${notes}`}</p></Fragment>
+)}
+</div>
+))}

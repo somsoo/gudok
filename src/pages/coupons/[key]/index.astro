@@ -1,0 +1,41 @@
+---
+// 쿠폰 페이지: /coupons/<키>/  affiliates.json 에 affiliate_url 또는 promo_code 를 채우면 공개(색인), 비우면 noindex 초안.
+import Base from '../../../layouts/Base.astro';
+import Faq from '../../../components/Faq.astro';
+import Go from '../../../components/Go.astro';
+import { COPY, SERVICES, TODAY, couponLive, faqLd, svcUrl, type Affiliate } from '../../../lib/data';
+import { couponMeta, couponPrograms } from '../../../lib/registry';
+
+export function getStaticPaths() {
+  return couponPrograms().map(([key, a]) => ({ params: { key }, props: { key, a } }));
+}
+
+const { key, a } = Astro.props as { key: string; a: Affiliate };
+const { path, title, desc } = couponMeta(key, a);
+const checked: string = a.code_checked_at || TODAY;
+const hubs = SERVICES.filter((s) => s.sharing_platform);
+---
+<Base path={path} title={title} desc={desc} crumbs={[['쿠폰', '/coupons/'], [a.name, path]]} ld={faqLd(COPY.coupon.faq)} noindex={!couponLive(key)} ads={false} disclosure>
+<article class="doc">
+<h1>{a.name} 프로모션 코드·이용 가이드</h1>
+<p class="meta">확인일: {checked}</p>
+<p class="lead">{a.name} 결제 화면에서 프로모션 코드를 적용하는 방법과 코드가 안 될 때 확인할 것, 결제 전에 알아 둘 위험을 정리했습니다.</p>
+{a.promo_code && (
+<div class="codebox"><span class="code">{a.promo_code}</span><button type="button" class="btn btn-primary" data-copy={a.promo_code}>코드 복사</button><p class="muted">{`${a.promo_benefit || ''} · 확인일 ${checked}`}</p></div>
+)}
+<p><Go k={key} label={`${a.name} 바로가기`} /></p>
+<h2>{a.name}은 어떤 서비스인가요?</h2>
+<p>{COPY.coupon.about}</p>
+<h2>프로모션 코드 적용 방법</h2>
+<ol class="steps">{(a.how_to_apply ?? []).map((x: string) => <li>{x}</li>)}</ol>
+<h2>코드가 적용되지 않을 때</h2>
+<ul>{COPY.coupon.troubleshoot.map((x: string) => <li>{x}</li>)}</ul>
+<h2>이용 전 꼭 확인할 리스크</h2>
+<ul>{COPY.coupon.risks.map((x: string) => <li>{x}</li>)}</ul>
+<p>자세한 내용: <a href="/guides/sharing-platform-checklist/">공유 플랫폼 이용 전 체크리스트</a></p>
+{a.review_html && <Fragment><h2>직접 써 본 후기</h2><Fragment set:html={a.review_html} /></Fragment>}
+<h2>공식 할인 방법과 비교하기</h2>
+<p>공유 플랫폼보다 안정적인 공식 할인이 있는지 먼저 비교해 보세요: {hubs.map((s, i) => <Fragment>{i > 0 && ' · '}<a href={svcUrl(s)}>{s.name}</a></Fragment>)}</p>
+<Faq items={COPY.coupon.faq} />
+</article>
+</Base>

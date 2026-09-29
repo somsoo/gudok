@@ -1,0 +1,11 @@
+---
+// 웹 결제·앱 결제 가격 차이 (app_price 가 있는 요금제)
+import { SERVICES, nf, svcUrl } from '../lib/data';
+
+const rows = SERVICES.flatMap((s) => s.plans.filter((p) => p.app_price && p.price).map((p) => ({ s, p, d: p.app_price! - p.price! })));
+---
+<div class="table-wrap"><table class="cmp stack"><thead><tr><th>서비스</th><th>요금제</th><th>웹 결제</th><th>앱 결제</th><th>월 차액</th><th>1년 차액</th></tr></thead><tbody>
+{rows.map(({ s, p, d }) => (
+<tr><th scope="row"><a href={svcUrl(s)}>{s.name}</a></th><td data-label="요금제">{p.name}</td><td class="num" data-label="웹 결제">{`${nf(p.price!)}원`}</td><td class="num" data-label="앱 결제">{`${nf(p.app_price!)}원`}</td><td class="num" data-label="월 차액"><strong>{`${nf(d)}원`}</strong></td><td class="num" data-label="1년 차액">{`${nf(d * 12)}원`}</td></tr>
+))}
+</tbody></table></div>

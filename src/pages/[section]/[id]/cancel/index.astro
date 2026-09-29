@@ -1,0 +1,48 @@
+---
+// 해지·환불 가이드: /<카테고리>/<서비스>/cancel/
+import Base from '../../../../layouts/Base.astro';
+import AdSlot from '../../../../components/AdSlot.astro';
+import DowngradeTable from '../../../../components/DowngradeTable.astro';
+import Faq from '../../../../components/Faq.astro';
+import PartnerList from '../../../../components/PartnerList.astro';
+import { COPY, SERVICES, articleLd, faqLd, svcUrl, type Service } from '../../../../lib/data';
+import { cancelMeta, categoryName } from '../../../../lib/registry';
+
+export function getStaticPaths() {
+  return SERVICES.map((s) => ({ params: { section: s.cat, id: s.id }, props: { s } }));
+}
+
+const { s } = Astro.props as { s: Service };
+const { path, title, desc } = cancelMeta(s);
+const c = s.cancel;
+const crumbs: [string, string][] = [[await categoryName(s.cat), `/${s.cat}/`], [s.name, svcUrl(s)], ['해지 방법', path]];
+const ld = [...articleLd(`${s.name} 해지·환불 방법`, desc, path), ...faqLd(COPY.cancel.faq)];
+---
+<Base path={path} title={title} desc={desc} crumbs={crumbs} ld={ld}>
+<article class="doc">
+<h1>{s.name} 해지·환불 방법</h1>
+<p class="meta">최종 확인: {s.verified_at} · 메뉴 이름은 앱 업데이트에 따라 조금씩 달라질 수 있습니다.</p>
+<p class="lead">{s.name} 구독을 결제한 경로(웹·App Store·Google Play·제휴사)별 해지 순서와 해지 뒤 이용 기간, 환불 기준을 정리했습니다.</p>
+<AdSlot pos="top" />
+<div class="summary-box"><h2>먼저 확인할 것: 어디서 결제했나요?</h2>
+<p>구독은 <strong>결제한 곳에서만</strong> 해지할 수 있습니다. 카드 명세서나 결제 알림 문자에서 결제처(서비스 웹사이트, Apple, Google, 통신사·제휴사)를 먼저 확인하세요.</p></div>
+<h2>웹사이트에서 결제한 경우</h2>
+<ol class="steps">{c.web.map((x: string) => <li>{x}</li>)}</ol>
+<h2>아이폰 앱(App Store)에서 결제한 경우</h2>
+<ol class="steps">{COPY.cancel.app_store.map((x: string) => <li>{x}</li>)}</ol>
+<h2>안드로이드 앱(Google Play)에서 결제한 경우</h2>
+<ol class="steps">{COPY.cancel.google_play.map((x: string) => <li>{x}</li>)}</ol>
+<h2>통신사·제휴사로 결제한 경우</h2>
+<p>{c.partner}</p>
+<PartnerList s={s} />
+<h2>해지 후 이용 기간과 환불</h2>
+<p>{c.after}</p>
+<p>{c.refund}</p>
+<p class="muted">스토어 결제 환불 절차는 <a href="/guides/app-store-google-play-cancel/">앱스토어·구글플레이 구독 해지·환불 방법</a>에 따로 정리했습니다.</p>
+<DowngradeTable s={s} />
+<div class="callout"><h2>해지 대신 더 싸게 유지하는 방법</h2>
+<p>{`${s.quick.cheapest} ${s.quick.safest}`}</p>
+<p><a class="btn btn-primary" href={svcUrl(s)}>{s.name} 할인 방법 전체 보기</a></p></div>
+<Faq items={COPY.cancel.faq} />
+</article>
+</Base>

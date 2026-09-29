@@ -1,0 +1,41 @@
+---
+h1: "유튜브 프리미엄 vs 라이트 vs 뮤직 차이"
+title: "유튜브 프리미엄 vs 라이트 vs 뮤직 차이 | 구독다이어트"
+desc: "유튜브 프리미엄·프리미엄 라이트·유튜브 뮤직 프리미엄의 가격과 기능 차이, 용도별 추천을 정리했습니다."
+intro: "2026년 한국에도 프리미엄 라이트가 생기면서 유튜브 유료 멤버십이 세 가지가 됐습니다. 가격과 기능 차이를 정리했습니다."
+services: ["youtube-premium", "youtube-music"]
+order: 1
+faq:
+  - q: "라이트에서도 쇼츠 광고가 없어지나요?"
+    a: "라이트는 비음악 일반 영상의 광고를 없애는 멤버십이며, 쇼츠·음악 콘텐츠·검색 등에는 광고가 나올 수 있습니다."
+  - q: "뮤직 프리미엄에서 프리미엄으로 바꾸면?"
+    a: "월 {{d:youtube-music:유튜브 뮤직 프리미엄:유튜브 프리미엄(뮤직 포함)}}원(웹 기준)을 더 내면 유튜브 영상 광고 제거까지 받을 수 있습니다."
+---
+import Price from '../../components/Price.astro';
+
+<h2>기능 비교</h2>
+<div class="table-wrap">
+<table class='cmp stack'>
+<thead><tr><th>구분</th><th>프리미엄</th><th>프리미엄 라이트</th><th>유튜브 뮤직 프리미엄</th></tr></thead>
+<tbody>
+<tr><th scope="row">웹 결제</th><td data-label="프리미엄" class="num">월 <Price t="p:youtube-premium:프리미엄" />원</td><td data-label="프리미엄 라이트" class="num">월 <Price t="p:youtube-premium:프리미엄 라이트" />원</td><td data-label="유튜브 뮤직 프리미엄" class="num">월 <Price t="p:youtube-music:유튜브 뮤직 프리미엄" />원</td></tr>
+<tr><th scope="row">아이폰 앱 결제</th><td data-label="프리미엄" class="num">월 <Price t="a:youtube-premium:프리미엄" />원</td><td data-label="프리미엄 라이트" class="num">월 <Price t="a:youtube-premium:프리미엄 라이트" />원</td><td data-label="유튜브 뮤직 프리미엄" class="num">월 <Price t="a:youtube-music:유튜브 뮤직 프리미엄" />원</td></tr>
+<tr><th scope="row">유튜브 영상 광고 제거</th><td data-label="프리미엄">O</td><td data-label="프리미엄 라이트">O(비음악 영상, 일부 광고 가능)</td><td data-label="유튜브 뮤직 프리미엄">X</td></tr>
+<tr><th scope="row">백그라운드·오프라인 저장</th><td data-label="프리미엄">O</td><td data-label="프리미엄 라이트">O(비음악 영상)</td><td data-label="유튜브 뮤직 프리미엄">O(음악)</td></tr>
+<tr><th scope="row">유튜브 뮤직 앱</th><td data-label="프리미엄">O</td><td data-label="프리미엄 라이트">X</td><td data-label="유튜브 뮤직 프리미엄">O</td></tr>
+</tbody>
+</table>
+</div>
+<h2>용도별 추천</h2>
+<ul>
+<li><strong>영상 광고만 없애고 싶다:</strong> 프리미엄 라이트(월 <Price t="p:youtube-premium:프리미엄 라이트" />원).</li>
+<li><strong>음악도 유튜브로 듣는다:</strong> 프리미엄(월 <Price t="p:youtube-premium:프리미엄" />원). 뮤직 프리미엄과 차이는 월 <Price t="d:youtube-music:유튜브 뮤직 프리미엄:유튜브 프리미엄(뮤직 포함)" />원입니다.</li>
+<li><strong>음악만 듣는다:</strong> 유튜브 뮤직 프리미엄(월 <Price t="p:youtube-music:유튜브 뮤직 프리미엄" />원) 또는 네이버플러스로 스포티파이.</li>
+</ul>
+<h2>고르는 순서</h2>
+<ol>
+<li>지난 한 달 동안 유튜브로 음악을 들은 시간이 많았는지 떠올려 보세요. 거의 없다면 라이트로 충분합니다.</li>
+<li>음악을 들었다면 다른 음악 앱을 따로 결제하고 있는지 확인하세요. 따로 내고 있다면 프리미엄 하나로 합치는 편이 쌉니다.</li>
+<li>결제는 어떤 멤버십이든 앱이 아닌 웹에서 하세요. 프리미엄 기준 아이폰 앱 결제보다 월 <Price t="ad:youtube-premium:프리미엄" />원, 1년이면 <Price t="ad:youtube-premium:프리미엄:x12" />원이 쌉니다.</li>
+</ol>
+<p>아이폰이라면 어떤 멤버십이든 앱이 아닌 웹에서 결제하세요. <a href="/guides/web-vs-app-payment/">웹 결제 방법</a></p>

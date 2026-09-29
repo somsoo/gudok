@@ -1,0 +1,91 @@
+---
+import AdSlot from '../components/AdSlot.astro';
+import Ext from '../components/Ext.astro';
+import { BASE, BRAND, DISCLOSURE_TEXT, NAV, SITE, TODAY, VER, safeJson } from '../lib/data';
+
+interface Props {
+  path: string;
+  title: string;
+  desc: string;
+  crumbs?: [string, string][];
+  ld?: object[];
+  noindex?: boolean;
+  /** 애드센스: DESIGN_CHECKLIST 기준 페이지당 정확히 2개. 상단은 각 페이지가 리드 문단 뒤에 <AdSlot pos="top" />로 넣고, 하단은 여기서 넣는다. */
+  ads?: boolean;
+  disclosure?: boolean;
+}
+
+const { path, title, desc, crumbs, ld = [], noindex = false, ads = true, disclosure = false } = Astro.props;
+const url = BASE + path;
+const items: [string, string][] | null = crumbs ? [['홈', '/'], ...crumbs] : null;
+const lds: object[] = [];
+if (items) {
+  lds.push({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items.map(([n, p], i) => (
+    { '@type': 'ListItem', position: i + 1, name: n, item: BASE + p })) });
+}
+lds.push(...ld);
+const ogImg = `${BASE}/assets/og-image.png`;
+// 404 같은 .html 경로는 정규 URL 이 아니므로 canonical/og:url 을 넣지 않는다 (체크리스트 4-6).
+const canonical = !path.endsWith('.html');
+const showAds = ads && Boolean(SITE.adsense_client);
+const sisters: { name: string; url: string }[] = SITE.sister_sites ?? [];
+---
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title}</title>
+<meta name="description" content={desc}>
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'}>
+{canonical && <link rel="canonical" href={url}>}
+{canonical && <meta property="og:url" content={url}>}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content={BRAND}>
+<meta property="og:title" content={title}>
+<meta property="og:description" content={desc}>
+<meta property="og:image" content={ogImg}>
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content={title}>
+<meta name="twitter:description" content={desc}>
+<meta name="twitter:image" content={ogImg}>
+<meta name="theme-color" content={SITE.theme_color}>
+<link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180">
+<link rel="stylesheet" href={`/assets/style.css?v=${VER}`}>
+<link rel="alternate" type="application/rss+xml" title={BRAND} href={`${BASE}/rss.xml`}>
+{SITE.naver_verification && <meta name="naver-site-verification" content={SITE.naver_verification}>}
+{SITE.google_verification && <meta name="google-site-verification" content={SITE.google_verification}>}
+{showAds && <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${SITE.adsense_client}`} crossorigin="anonymous"></script>}
+<style is:inline id="layout-shield">html,body{max-width:100%;overflow-x:hidden}.manual-ad-box{width:100%;max-width:960px;margin-left:auto;margin-right:auto;text-align:center;overflow:hidden}.manual-ad-box ins{max-width:100%!important;overflow:hidden!important}</style>
+{lds.map((x) => <script is:inline type="application/ld+json" set:html={safeJson(x)}></script>)}
+</head>
+<body>
+<a class="skip" href="#main">본문 바로가기</a>
+<header class="site-header"><div class="wrap">
+<a class="logo" href="/"><span class="logo-mark" aria-hidden="true">₩</span>{BRAND}</a>
+<nav class="nav" aria-label="주요 메뉴">{NAV.map(([n, p]) => <a href={p} aria-current={path.startsWith(p) ? 'page' : undefined}>{n}</a>)}</nav>
+</div></header>
+{disclosure && <div class="disclosure"><div class="wrap">{DISCLOSURE_TEXT}</div></div>}
+<main id="main" class="wrap">
+{items && (
+<nav class="crumbs" aria-label="현재 위치">{items.slice(0, -1).map(([n, p]) => <Fragment><a href={p}>{n}</a>{' › '}</Fragment>)}<span>{items[items.length - 1][0]}</span></nav>
+)}
+<slot />
+{showAds && <AdSlot pos="bottom" />}
+</main>
+<footer class="site-footer"><div class="wrap">
+<p class="foot-links"><a href="/about/">소개</a> · <a href="/editorial-policy/">편집 원칙</a> · <a href="/disclosure/">제휴·광고 고지</a> · <a href="/privacy/">개인정보처리방침</a> · <a href="/terms/">이용약관</a></p>
+<p class="muted">요금 정보는 {TODAY} 기준으로 확인했으며 서비스사 사정에 따라 바뀔 수 있습니다. 최종 가격은 각 공식 페이지에서 확인하세요.</p>
+<p class="muted">{DISCLOSURE_TEXT}</p>
+<p class="muted">서비스명과 상표는 각 권리자의 소유입니다.{sisters.length > 0 && <Fragment>{' 함께 쓰면 좋은 도구: '}{sisters.map((x, i) => <Fragment>{i > 0 && ' · '}<Ext url={x.url} label={x.name} /></Fragment>)}</Fragment>}</p>
+<p class="muted">© {BRAND} · <Ext url={SITE.network_url ?? 'https://enjoy-onepage.com/'} label={SITE.network_name ?? 'Enjoy OnePage'} /></p>
+</div></footer>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<script is:inline src={`/assets/app.js?v=${VER}`} defer></script>
+</body>
+</html>

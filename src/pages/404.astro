@@ -1,0 +1,9 @@
+---
+import Base from '../layouts/Base.astro';
+import { META } from '../lib/registry';
+
+const m = META.notFound;
+---
+<Base path={m.path} title={m.title} desc={m.desc} noindex ads={false}>
+<article class="doc"><h1>페이지를 찾을 수 없습니다</h1><p>주소가 바뀌었거나 삭제된 페이지입니다.</p><p><a class="btn btn-primary" href="/">홈으로</a> <a class="btn" href="/tools/subscription-calculator/">구독료 계산기</a></p></article>
+</Base>

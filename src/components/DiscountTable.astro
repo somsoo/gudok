@@ -1,0 +1,15 @@
+---
+// 서비스 허브: 더 싸게 쓰는 방법 비교표
+import { STAB, TYPE_LABEL, type Service } from '../lib/data';
+
+interface Props { s: Service }
+const { s } = Astro.props;
+---
+<div class="table-wrap"><table class="cmp stack"><thead><tr><th>방법</th><th>월 부담</th><th>조건</th><th>안정성</th></tr></thead><tbody>
+{s.discounts.map((d) => {
+  const [label, cls] = STAB[d.stab ?? 'mid'] ?? STAB.mid;
+  return (
+<tr><th scope="row"><span class="tag">{TYPE_LABEL[d.type] ?? d.type}</span>{' '}{d.title}</th><td class="num" data-label="월 부담">{d.cost ?? ''}</td><td data-label="조건">{d.cond ?? ''}</td><td data-label="안정성"><span class={`badge ${cls}`}>{label}</span></td></tr>
+  );
+})}
+</tbody></table></div>

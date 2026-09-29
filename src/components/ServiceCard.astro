@@ -1,0 +1,9 @@
+---
+import { cheapest, fmtPrice, svcUrl, type Service } from '../lib/data';
+
+interface Props { s: Service }
+const { s } = Astro.props;
+const low = cheapest(s);
+const price = low ? fmtPrice(low) : '무료 요금제 있음';
+---
+<a class="card svc" href={svcUrl(s)}><strong>{s.name}</strong><span class="muted">{s.short}</span><span class="price">{`${price}~`}</span></a>

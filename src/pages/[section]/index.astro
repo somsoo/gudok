@@ -1,0 +1,45 @@
+---
+// 한 단계 주소: 카테고리(/ott/ 등, src/content/categories)와 신뢰 페이지(/about/ 등, src/content/pages)
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import CompareTable from '../../components/CompareTable.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import YearCompare from '../../components/YearCompare.astro';
+import { SERVICES, SITE, TODAY, articleLd, nf } from '../../lib/data';
+import { sorted } from '../../lib/registry';
+
+export async function getStaticPaths() {
+  return [
+    ...(await sorted('categories')).map((entry) => ({ params: { section: entry.id }, props: { kind: 'category' as const, entry } })),
+    ...(await sorted('pages')).map((entry) => ({ params: { section: entry.id }, props: { kind: 'trust' as const, entry } })),
+  ];
+}
+
+const { kind, entry } = Astro.props;
+const { Content } = await render(entry);
+const path = `/${entry.id}/`;
+const d = entry.data;
+const svcs = kind === 'category' ? SERVICES.filter((s) => s.cat === entry.id) : [];
+const ids = svcs.map((s) => s.id);
+---
+{kind === 'category' ? (
+<Base path={path} title={d.title} desc={d.desc} crumbs={[['name' in d ? d.name : d.h1, path]]} ld={articleLd(d.h1, d.desc, path)} disclosure>
+<article class="doc">
+<h1>{d.h1}</h1>
+<p class="meta">요금 확인: {TODAY} · 원화 환산 기준 1달러={nf(SITE.usd_krw)}원</p>
+<p class="lead">{'intro' in d ? d.intro : ''}</p>
+<AdSlot pos="top" />
+<h2>요금 한눈에 비교</h2>
+<CompareTable ids={ids} />
+<YearCompare ids={ids} />
+<h2>서비스별 자세히 보기</h2>
+<div class="grid">{svcs.map((s) => <ServiceCard s={s} />)}</div>
+<Content />
+</article>
+</Base>
+) : (
+<Base path={path} title={d.title} desc={d.desc} crumbs={[[d.h1, path]]} ads={false}>
+<article class="doc"><h1>{d.h1}</h1><Content /></article>
+</Base>
+)}

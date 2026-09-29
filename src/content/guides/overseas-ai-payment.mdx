@@ -1,0 +1,32 @@
+---
+h1: "해외 AI 구독 결제 전 알아둘 것"
+title: "해외 AI 구독 결제: 부가세·수수료·환율 | 구독다이어트"
+desc: "ChatGPT·Claude 등 달러 구독에 붙는 부가세, 해외 결제 수수료, 환율과 원화결제 차단법을 정리했습니다."
+intro: "AI 서비스 대부분은 달러로 결제되어 표시 가격과 실제 청구액이 다릅니다. 청구 구조와 줄이는 방법을 정리했습니다."
+disclosure: false
+order: 3
+faq:
+  - q: "앱에서 결제하면 원화로 되나요?"
+    a: "앱 마켓 결제는 원화 가격으로 청구되지만 웹 가격과 다를 수 있고, 해지·환불은 앱 마켓에서 처리해야 합니다."
+---
+import CompareTable from '../../components/CompareTable.astro';
+import UsdBillExample from '../../components/UsdBillExample.astro';
+
+<h2>AI 요금제 한눈에</h2>
+<CompareTable cat="ai" />
+<h2>실제 청구액은 이렇게 정해집니다</h2>
+<ol>
+<li><strong>달러 표시 가격</strong>에</li>
+<li><strong>부가세(10%)</strong>가 더해질 수 있고(표시 방식은 서비스마다 다름),</li>
+<li>카드사의 <strong>해외 이용 수수료</strong>가 붙으며,</li>
+<li>결제일이 아닌 <strong>매입일 환율</strong>로 원화가 확정됩니다.</li>
+</ol>
+<h2>요금제별 실제 청구 예시</h2>
+<UsdBillExample />
+<h2>줄이는 방법</h2>
+<ul>
+<li><strong>해외 원화결제(DCC) 차단:</strong> 해외 사이트에서 원화로 결제되면 환전 수수료가 추가로 붙어 더 비싸질 수 있습니다. 카드사 앱의 '해외 원화결제 차단'을 켜 두세요.</li>
+<li><strong>연간 결제:</strong> 오래 쓸 서비스는 연간 결제가 월 단가를 낮춥니다(예: Claude Pro 월 $17꼴).</li>
+<li><strong>원화 요금제 활용:</strong> Google AI Pro처럼 원화로 결제되는 요금제는 환율 영향을 받지 않습니다.</li>
+<li><strong>해지 알림:</strong> 무료 체험은 종료일 전날 알림을 맞춰 두세요.</li>
+</ul>

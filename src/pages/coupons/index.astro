@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+import { couponLive } from '../../lib/data';
+import { META, couponMeta, couponPrograms } from '../../lib/registry';
+
+const m = META.couponsIndex;
+const live = couponPrograms().filter(([key]) => couponLive(key));
+---
+<Base path={m.path} title={m.title} desc={m.desc} crumbs={[['쿠폰', m.path]]} noindex={live.length === 0} ads={false} disclosure>
+<article class="doc"><h1>구독 할인 코드 모음</h1><p class="lead">확인일을 함께 적은 구독 서비스 프로모션 코드와 적용 방법입니다.</p><ul class="list">
+{live.length > 0 ? live.map(([key, a]) => <li><a href={couponMeta(key, a).path}>{`${a.name} 프로모션 코드`}</a></li>) : <li>준비 중입니다.</li>}
+</ul></article>
+</Base>

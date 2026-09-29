@@ -1,0 +1,40 @@
+---
+// 구독료 계산기. 동작은 public/assets/app.js 가 window.__CALC 를 읽어 처리한다.
+import Base from '../../../layouts/Base.astro';
+import AdSlot from '../../../components/AdSlot.astro';
+import Faq from '../../../components/Faq.astro';
+import CalcGuide from '../../../partials/calc-guide.mdx';
+import { CAT_ORDER, COPY, SITE, TODAY, calcData, faqLd, nf, safeJson, webAppLd } from '../../../lib/data';
+import { META, categoryName } from '../../../lib/registry';
+
+const m = META.calc;
+const data = calcData();
+const groups = await Promise.all(CAT_ORDER.map(async (cat) => ({ legend: await categoryName(cat), rows: data.filter((x) => x.cat === cat) })));
+const ld = [...webAppLd('내 구독료 계산기', m.path, 'FinanceApplication'), ...faqLd(COPY.calc_faq)];
+---
+<Base path={m.path} title={m.title} desc={m.desc} crumbs={[['도구', '/tools/'], ['구독료 계산기', m.path]]} ld={ld}>
+<article class="doc">
+<h1>내 구독료 계산기</h1>
+<p class="lead">쓰고 있는 구독과 요금제를 고르면 한 달·1년 구독료 합계와 서비스별 절약 방법을 바로 보여줍니다. 입력값은 서버로 전송되지 않고 브라우저 안에서만 계산됩니다.</p>
+<AdSlot pos="top" />
+<div id="calc" class="tool">
+{groups.map((g) => (
+<fieldset><legend>{g.legend}</legend>{g.rows.map((d) => (
+<div class="calc-row"><label><input type="checkbox" data-sid={d.id}>{` ${d.name}`}</label><select data-sid={d.id} aria-label={`${d.name} 요금제`}>{d.plans.map((p, i) => <option value={String(i)}>{`${p.n} · ${nf(p.v)}원`}</option>)}</select></div>
+))}</fieldset>
+))}
+<div class="result" id="calc-result" aria-live="polite">
+<p class="total">한 달 합계 <strong id="calc-month">0원</strong></p>
+<p class="total-sub">1년 <strong id="calc-year">0원</strong> · 구독 <span id="calc-count">0</span>개</p>
+<ul id="calc-lines" class="receipt"></ul>
+<p class="tips-title" id="calc-tips-title" hidden>이렇게 하면 줄일 수 있어요</p>
+<ul id="calc-tips" class="tips"></ul>
+<p class="actions"><button type="button" class="btn btn-primary" id="calc-share">결과 공유하기</button> <button type="button" class="btn" id="calc-reset">초기화</button></p>
+</div>
+</div>
+<p class="muted">※ 요금 데이터 기준 모의 계산입니다. 달러 요금은 1달러={nf(SITE.usd_krw)}원으로 환산했으며 부가세·해외 결제 수수료는 포함하지 않았습니다. 요금 확인 {TODAY}.</p>
+<CalcGuide />
+<Faq items={COPY.calc_faq} />
+</article>
+<script is:inline set:html={`window.__CALC=${safeJson(data)};`}></script>
+</Base>

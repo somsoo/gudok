@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+import Ext from '../../components/Ext.astro';
+import { SITE } from '../../lib/data';
+import { META } from '../../lib/registry';
+
+const m = META.tools;
+const sisters: { name: string; url: string }[] = SITE.sister_sites ?? [];
+---
+<Base path={m.path} title={m.title} desc={m.desc} crumbs={[['도구', m.path]]} ads={false}>
+<article class="doc"><h1>구독료 절약 도구</h1><p class="lead">설치나 가입 없이 브라우저에서 바로 쓰는 무료 도구입니다.</p><ul class="list">
+<li><a href="/tools/subscription-calculator/">내 구독료 계산기</a> <span class="muted">매달 나가는 구독료 합계와 절약 방법</span></li>
+<li><a href="/tools/ott-finder/">나에게 맞는 OTT 찾기</a> <span class="muted">취향·예산으로 OTT 추천</span></li>
+{sisters.map((x) => <li><Ext url={x.url} label={x.name} /></li>)}
+</ul></article>
+</Base>

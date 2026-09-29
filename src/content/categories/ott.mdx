@@ -1,0 +1,23 @@
+---
+name: "OTT"
+h1: "OTT 요금 비교 한눈에 보기"
+title: "OTT 요금 비교: 넷플릭스·티빙·디즈니+ | 구독다이어트"
+desc: "넷플릭스·유튜브 프리미엄·티빙·디즈니+·웨이브·쿠팡플레이 요금제와 가장 싸게 보는 방법을 비교합니다."
+intro: "국내에서 많이 쓰는 OTT 6곳의 공식 요금제와 광고형·결합·제휴 할인을 한 표에 모았습니다. 서비스 이름을 누르면 요금제별 조건과 해지 방법까지 볼 수 있습니다."
+order: 0
+---
+import BundleTable from '../../components/BundleTable.astro';
+import Price from '../../components/Price.astro';
+
+<h2>OTT 고르는 4가지 기준</h2>
+<ol>
+<li><strong>보는 콘텐츠:</strong> 해외 시리즈·영화는 넷플릭스와 디즈니+, tvN·JTBC 예능·드라마와 프로야구는 티빙, 지상파 다시보기는 웨이브가 강합니다. 쿠팡 와우 회원이라면 쿠팡플레이는 추가 비용이 없습니다.</li>
+<li><strong>광고 허용 여부:</strong> 광고형 요금제(넷플릭스 월 <Price t="p:netflix:광고형 스탠다드" />원, 티빙 월 <Price t="p:tving:광고형 스탠다드" />원)는 광고 없는 최저 요금제보다 월 <Price t="d:tving:광고형 스탠다드:베이직" />~<Price t="d:netflix:광고형 스탠다드:스탠다드" />원 저렴합니다.</li>
+<li><strong>함께 볼 인원:</strong> 동시 시청 대수가 모자라면 상위 요금제가 필요합니다. 가구 밖 사람과 나눠 보려면 넷플릭스 추가 회원처럼 공식 방법을 먼저 확인하세요.</li>
+<li><strong>결제 경로:</strong> 같은 요금제라도 앱 인앱 결제보다 웹 결제가, 월 결제보다 연간 결제가 쌉니다. <a href="/guides/web-vs-app-payment/">웹 결제가 싼 이유</a></li>
+</ol>
+<h2>두 개 이상 본다면 결합 상품부터</h2>
+<BundleTable />
+<h2>구독 순환으로 한 번에 하나만</h2>
+<p>보고 싶은 작품이 몰릴 때 한 달씩만 결제하고 다음 달에는 다른 서비스로 옮기면, 여러 OTT를 동시에 유지하는 것보다 훨씬 적게 듭니다. 해지는 결제한 곳에서만 되니 서비스별 해지 방법을 미리 확인해 두세요.</p>
+<p><a class="btn btn-primary" href="/tools/ott-finder/">나에게 맞는 OTT 찾기</a> <a class="btn" href="/tools/subscription-calculator/">내 구독료 계산하기</a></p>

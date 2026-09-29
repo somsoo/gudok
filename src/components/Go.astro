@@ -1,0 +1,6 @@
+---
+// 제휴 이동 버튼. 모든 제휴 링크는 /go/<키>/ 를 거친다 (Cloudflare 에서는 _redirects 로 서버 302).
+interface Props { k: string; label: string; class?: string }
+const { k, label, class: cls = 'btn btn-primary' } = Astro.props;
+---
+<a class={cls} href={`/go/${k}/`} rel="sponsored nofollow noopener" target="_blank">{label}</a>

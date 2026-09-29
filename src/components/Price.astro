@@ -1,0 +1,8 @@
+---
+// 본문 속 가격: <Price t="p:netflix:광고형 스탠다드" /> → 7,000  (토큰 규칙은 src/lib/data.ts tokenValue 참고)
+// 없는 서비스·요금제를 쓰면 빌드가 멈춘다.
+import { tokenText } from '../lib/data';
+
+interface Props { t: string }
+---
+{tokenText(Astro.props.t)}

@@ -1,0 +1,12 @@
+---
+// 애드센스 수동 광고. 상단 슬림(ad_slots[0]) · 하단(ad_slots[1]), 각 ins 바로 아래에서 push 1회.
+import { SITE } from '../lib/data';
+
+interface Props { pos: 'top' | 'bottom' }
+const { pos } = Astro.props;
+const client: string = SITE.adsense_client;
+const top = pos === 'top';
+---
+{client && (
+<div class={`manual-ad-box ad-${pos}`}><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client={client} data-ad-slot={top ? SITE.ad_slots[0] : SITE.ad_slots[1]} data-ad-format={top ? 'horizontal' : 'auto'} data-full-width-responsive="true"></ins><script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
+)}

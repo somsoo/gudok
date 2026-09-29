@@ -1,0 +1,24 @@
+---
+// 해외 AI 결제 가이드용: 달러 요금제의 실제 청구 추정 (카드 수수료율 1%는 가정값)
+import { SERVICES, SITE, fmtG, nf, officialPlans, pyRound, won } from '../lib/data';
+
+const byUsd = new Map<number, string[]>();
+for (const s of SERVICES) {
+  for (const p of officialPlans(s)) {
+    if (p.usd) byUsd.set(p.usd, [...(byUsd.get(p.usd) ?? []), `${s.name} ${p.name}`]);
+  }
+}
+const fx: number = SITE.usd_krw;
+const fee = 0.01;
+const usd2 = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const rows = [...byUsd.keys()].sort((a, b) => a - b).map((usd) => {
+  const base = usd * 1.1 * fx;
+  return { usd, names: byUsd.get(usd)!.slice(0, 3).join(' · '), vat: usd2.format(usd * 1.1), krw: won(pyRound(base)), withFee: won(pyRound(base * (1 + fee))) };
+});
+---
+<div class="table-wrap"><table class="cmp stack"><thead><tr><th>표시 가격</th><th>해당 요금제</th><th>부가세 10% 포함</th><th>원화 환산</th><th>수수료 1% 가정 시</th></tr></thead><tbody>
+{rows.map((r) => (
+<tr><th scope="row">{`$${fmtG(r.usd)}`}</th><td data-label="해당 요금제">{r.names}</td><td class="num" data-label="부가세 10% 포함">{`$${r.vat}`}</td><td class="num" data-label="원화 환산">{r.krw}</td><td class="num" data-label="수수료 1% 가정 시"><strong>{r.withFee}</strong></td></tr>
+))}
+</tbody></table></div>
+<p class="muted">1달러={nf(fx)}원 기준 추정치입니다. 부가세 표시 방식과 카드 해외 이용 수수료율은 서비스·카드사마다 다르며, 여기서는 이해를 돕기 위해 수수료를 1%로 가정했습니다.</p>

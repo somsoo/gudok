@@ -1,0 +1,41 @@
+---
+// 요금제별 1년 비용. 달러 요금제는 부가세 10% 포함 추정, 원화 요금제는 앱 결제 1년을 함께 보여준다.
+import { SITE, nf, officialPlans, planKrw, vatKrw, won, type Plan, type Service } from '../lib/data';
+
+interface Props { s: Service }
+const { s } = Astro.props;
+const paid: [Plan, number][] = [];
+const rows = [];
+for (const p of officialPlans(s)) {
+  const v = planKrw(p);
+  if (!v) continue;
+  paid.push([p, v]);
+  let note = '—';
+  if (p.usd != null) note = `부가세 10%가 붙으면 월 약 ${won(vatKrw(v))}`;
+  else if (p.app_price) note = `앱 결제 시 1년 ${won(p.app_price * 12)} (웹보다 ${won((p.app_price - v) * 12)} 더)`;
+  rows.push({ name: p.name, month: won(v), year: won(v * 12), note });
+}
+let gap = '';
+let fx = '';
+if (paid.length) {
+  let [lo, hi] = [paid[0], paid[0]];
+  for (const x of paid) {
+    if (x[1] < lo[1]) lo = x;
+    if (x[1] > hi[1]) hi = x;
+  }
+  if (hi[1] > lo[1]) gap = ` 가장 싼 유료 요금제(${lo[0].name})와 가장 비싼 요금제(${hi[0].name})는 1년에 ${won((hi[1] - lo[1]) * 12)} 차이가 납니다.`;
+  if (paid.some(([p]) => p.usd != null)) {
+    fx = ` 달러 요금제는 1달러=${nf(SITE.usd_krw)}원으로 환산했으며, 실제 청구액은 환율·부가세·카드 해외 이용 수수료에 따라 달라집니다.`;
+  }
+}
+---
+{rows.length > 0 && (
+<Fragment>
+<h2>요금제별 1년 비용</h2><p>{`매달 내는 금액을 1년으로 합치면 요금제 차이가 더 분명해집니다.${gap}${fx}`}</p>
+<div class="table-wrap"><table class="cmp stack"><thead><tr><th>요금제</th><th>월 요금</th><th>1년(12개월)</th><th>참고</th></tr></thead><tbody>
+{rows.map((r) => (
+<tr><th scope="row">{r.name}</th><td class="num" data-label="월 요금">{r.month}</td><td class="num" data-label="1년(12개월)"><strong>{r.year}</strong></td><td data-label="참고">{r.note}</td></tr>
+))}
+</tbody></table></div>
+</Fragment>
+)}

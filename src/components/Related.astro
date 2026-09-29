@@ -1,0 +1,14 @@
+---
+// 서비스 허브 하단: 같은 카테고리 서비스, 이 서비스가 들어간 비교 글, 계산기
+import { SERVICES, svcUrl, type Service } from '../lib/data';
+import { sorted } from '../lib/registry';
+
+interface Props { s: Service }
+const { s } = Astro.props;
+const links = [
+  ...SERVICES.filter((x) => x.cat === s.cat && x.id !== s.id).map((x) => ({ href: svcUrl(x), label: `${x.name} 요금제` })),
+  ...(await sorted('compare')).filter((c) => c.data.services.includes(s.id)).map((c) => ({ href: `/compare/${c.id}/`, label: c.data.h1 })),
+  { href: '/tools/subscription-calculator/', label: '내 구독료 계산기' },
+];
+---
+<section class="related"><h2>함께 보면 좋은 글</h2><p>{links.map((l, i) => <Fragment>{i > 0 && ' · '}<a href={l.href}>{l.label}</a></Fragment>)}</p></section>

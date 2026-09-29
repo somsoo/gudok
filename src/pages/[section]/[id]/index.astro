@@ -1,0 +1,55 @@
+---
+// 서비스 허브: /<카테고리>/<서비스>/  (data/services.json 의 서비스마다 1개)
+import Base from '../../../layouts/Base.astro';
+import AdSlot from '../../../components/AdSlot.astro';
+import DiscountDetails from '../../../components/DiscountDetails.astro';
+import DiscountTable from '../../../components/DiscountTable.astro';
+import Ext from '../../../components/Ext.astro';
+import Faq from '../../../components/Faq.astro';
+import Go from '../../../components/Go.astro';
+import PlansTable from '../../../components/PlansTable.astro';
+import Related from '../../../components/Related.astro';
+import YearTable from '../../../components/YearTable.astro';
+import { AFF, SERVICES, articleLd, couponLive, faqLd, svcUrl, type Service } from '../../../lib/data';
+import { categoryName, serviceMeta } from '../../../lib/registry';
+
+export function getStaticPaths() {
+  return SERVICES.map((s) => ({ params: { section: s.cat, id: s.id }, props: { s } }));
+}
+
+const { s } = Astro.props as { s: Service };
+const { path, title, desc } = serviceMeta(s);
+const q = s.quick;
+const sharingCta = Boolean(s.sharing_platform) && couponLive('gamsgo');
+const crumbs: [string, string][] = [[await categoryName(s.cat), `/${s.cat}/`], [s.name, path]];
+const ld = [...articleLd(`${s.name} 요금제·할인 총정리`, desc, path), ...faqLd(s.faq)];
+---
+<Base path={path} title={title} desc={desc} crumbs={crumbs} ld={ld} disclosure>
+<article class="doc">
+<h1>{s.name} 요금제·할인 총정리</h1>
+<p class="meta">요금 확인: {s.verified_at} · 출처: <Ext url={s.source_url} label={s.source_note} /> · <Ext url={s.official_url} label="공식 사이트" /></p>
+<p class="lead">{s.summary}</p>
+<AdSlot pos="top" />
+<div class="summary-box">
+<h2>3줄 요약</h2>
+<ul><li><strong>가장 싸게:</strong> {q.cheapest}</li><li><strong>가장 무난하게:</strong> {q.safest}</li><li><strong>나눠 쓰려면:</strong> {q.shared}</li></ul>
+</div>
+<h2>공식 요금제</h2>
+<PlansTable s={s} />
+{s.plans_note && <p class="muted">{s.plans_note}</p>}
+<YearTable s={s} />
+<h2>더 싸게 쓰는 방법 비교</h2>
+<DiscountTable s={s} />
+<DiscountDetails s={s} />
+<h2>계정 공유 규정</h2>
+<p>{s.sharing}</p>
+{sharingCta && (
+<div class="callout"><p><strong>공유 플랫폼을 고려한다면</strong>{` 약관 리스크를 먼저 확인한 뒤 이용하세요. ${AFF.gamsgo.promo_benefit || ''}`}</p><p><Go k="gamsgo" label="겜스고 바로가기" />{' '}<a class="btn" href="/coupons/gamsgo/">프로모션 코드 보기</a></p></div>
+)}
+<h2>해지·환불 요약</h2>
+<p>{`${s.cancel.after} ${s.cancel.refund}`}</p>
+<p><a class="btn" href={svcUrl(s, 'cancel/')}>{s.name} 해지 방법 자세히 보기</a></p>
+<Faq items={s.faq} />
+<Related s={s} />
+</article>
+</Base>

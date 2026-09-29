@@ -1,0 +1,6 @@
+---
+// 외부 링크: 검색엔진 추천 신호를 넘기지 않고 새 탭으로 연다.
+interface Props { url: string; label: string; class?: string }
+const { url, label, class: cls } = Astro.props;
+---
+<a class={cls || undefined} href={url} rel="nofollow noopener noreferrer" target="_blank">{label}</a>

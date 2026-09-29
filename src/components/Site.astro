@@ -1,0 +1,7 @@
+---
+// 신뢰 페이지용 사이트 값: brand · domain · contact · operator · today (site.json 에서 읽음)
+import { trustValue } from '../lib/data';
+
+interface Props { field: 'brand' | 'domain' | 'contact' | 'operator' | 'today' }
+---
+{trustValue(Astro.props.field)}

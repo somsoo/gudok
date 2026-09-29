@@ -1,0 +1,21 @@
+{
+  "brand": "구독다이어트",
+  "tagline": "구독료, 제값보다 덜 내는 방법",
+  "domain": "gudok.enjoy-onepage.com",
+  "base_url": "https://gudok.enjoy-onepage.com",
+  "theme_color": "#0f766e",
+  "adsense_client": "ca-pub-2228289204702106",
+  "ad_slots": ["3824727725", "3416334507"],
+  "ads_txt": "google.com, pub-2228289204702106, DIRECT, f08c47fec0942fa0",
+  "operator_name": "",
+  "contact_email": "",
+  "usd_krw": 1400,
+  "last_reviewed": "2026-09-29",
+  "naver_verification": "",
+  "google_verification": "",
+  "sister_sites": [
+    {"name": "OTT 파티 N빵 정산기", "url": "https://ott-party-calc.enjoy-onepage.com/"}
+  ],
+  "network_name": "Enjoy OnePage",
+  "network_url": "https://enjoy-onepage.com/"
+}

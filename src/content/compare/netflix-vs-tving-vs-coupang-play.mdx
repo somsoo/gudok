@@ -1,0 +1,30 @@
+---
+h1: "넷플릭스 vs 티빙 vs 쿠팡플레이 비교"
+title: "넷플릭스 vs 티빙 vs 쿠팡플레이 비교 | 구독다이어트"
+desc: "넷플릭스·티빙·쿠팡플레이·디즈니+ 요금, 동시 시청, 강점을 비교하고 조합별 최저 비용을 정리했습니다."
+intro: "가장 많이 비교하는 OTT 네 곳을 요금·동시 시청·콘텐츠 강점 기준으로 정리했습니다."
+services: ["netflix", "tving", "coupang-play", "disney-plus"]
+order: 0
+faq:
+  - q: "하나만 고른다면?"
+    a: "보는 콘텐츠가 기준입니다. 해외 작품 위주면 넷플릭스, 국내 방송·야구면 티빙, 쿠팡 와우 회원이면 쿠팡플레이부터 쓰는 것이 가장 경제적입니다."
+  - q: "여러 개를 싸게 보는 방법은?"
+    a: "티빙 결합 이용권(더블·3 PACK)이나 네이버플러스·쿠팡 와우 같은 멤버십 혜택을 조합하고, 필요할 때만 한 달씩 구독하세요."
+---
+import BundleTable from '../../components/BundleTable.astro';
+import Price from '../../components/Price.astro';
+
+<h2>이런 사람에게 추천</h2>
+<ul>
+<li><strong>넷플릭스:</strong> 해외 시리즈·영화와 넷플릭스 한국 오리지널을 주로 보는 사람. 광고가 괜찮다면 월 <Price t="p:netflix:광고형 스탠다드" />원부터.</li>
+<li><strong>티빙:</strong> tvN·JTBC 예능·드라마를 방송 직후 보고, 프로야구(KBO)를 챙겨 보는 사람.</li>
+<li><strong>쿠팡플레이:</strong> 이미 쿠팡 와우 회원인 사람. 추가 비용 없이 오리지널 예능과 스포츠 중계를 볼 수 있습니다.</li>
+<li><strong>디즈니+:</strong> 디즈니·픽사·마블·스타워즈 팬, 아이와 함께 보는 가족.</li>
+</ul>
+<h2>조합별 최저 비용</h2>
+<ul>
+<li><strong>넷플릭스 + 쿠팡플레이:</strong> 쿠팡 와우 회원이라면 넷플릭스 광고형(월 <Price t="p:netflix:광고형 스탠다드" />원) 또는 네이버플러스 멤버십(월 <Price t="b:naver_netflix_ad" />원)만 더하면 됩니다.</li>
+<li><strong>티빙 + 디즈니+:</strong> 더블 이용권 월 <Price t="b:tving_disney" />원(따로 결제 시 <Price t="bs:tving_disney" />원).</li>
+<li><strong>티빙 + 웨이브 + 디즈니+:</strong> 3 PACK 월 <Price t="b:tving_3pack" />원(따로 결제 시 <Price t="bs:tving_3pack" />원).</li>
+</ul>
+<BundleTable />

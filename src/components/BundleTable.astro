@@ -1,0 +1,12 @@
+---
+// 결합 상품 표 (data/services.json 의 bundles)
+import { BUNDLE_LIST, bundleSep, won } from '../lib/data';
+
+const rows = BUNDLE_LIST.map((b) => ({ b, sep: bundleSep(b) }));
+---
+<div class="table-wrap"><table class="cmp stack"><thead><tr><th>결합 상품</th><th>월 요금</th><th>따로 결제 시</th><th>월 절약</th><th>조건</th></tr></thead><tbody>
+{rows.map(({ b, sep }) => (
+<tr><th scope="row"><a href={b.href}>{b.name}</a></th><td class="num" data-label="월 요금">{won(b.price)}</td><td class="num" data-label="따로 결제 시">{won(sep)}</td><td class="num" data-label="월 절약"><strong>{won(sep - b.price)}</strong></td><td data-label="조건">{b.cond}</td></tr>
+))}
+</tbody></table></div>
+<p class="muted">따로 결제 금액은 각 서비스 공식 웹 가격 기준입니다. 네이버플러스는 쇼핑 적립 등 멤버십 혜택이 별도로 붙습니다.</p>

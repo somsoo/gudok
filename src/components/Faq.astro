@@ -1,0 +1,10 @@
+---
+// FAQ 목록. 같은 items 로 페이지에서 faqLd() 를 만들면 구조화 데이터와 본문이 일치한다.
+import { faqItems, type FaqItem } from '../lib/data';
+
+interface Props { items?: FaqItem[] }
+const list = faqItems(Astro.props.items ?? []);
+---
+{list.length > 0 && (
+<section class="faq"><h2>자주 묻는 질문</h2>{list.map((i) => <details><summary>{i.q}</summary><p>{i.a}</p></details>)}</section>
+)}

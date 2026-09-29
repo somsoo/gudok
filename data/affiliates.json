@@ -1,0 +1,21 @@
+{
+  "_help": {
+    "fields": "name, kind(sharing_platform=쿠폰 페이지 생성 / 그 외=CTA만), official_url, affiliate_url, promo_code, promo_benefit, code_checked_at(YYYY-MM-DD), how_to_apply[], cta_label, disclosure(쿠팡 파트너스 등 지정 문구), placements[{service: 서비스 id 또는 *, type: official|annual|web|bundle|membership|carrier|card|promo|team|sharing_official|sharing_platform, label}]",
+    "flow": "affiliate_url 을 채우면 /go/<키>/ 가 제휴 링크로 바뀌고, placements 에 적은 서비스·할인 유형 블록에 버튼이 붙습니다. 수정 후 npm run build"
+  },
+  "gamsgo": {
+    "name": "겜스고(GamsGo)",
+    "kind": "sharing_platform",
+    "official_url": "https://www.gamsgo.com/",
+    "affiliate_url": "",
+    "promo_code": "",
+    "promo_benefit": "",
+    "code_checked_at": "",
+    "how_to_apply": [
+      "겜스고에서 원하는 구독 상품과 기간을 고릅니다.",
+      "결제 화면의 프로모션 코드(쿠폰) 입력란에 코드를 붙여 넣습니다.",
+      "할인 금액이 적용됐는지 최종 결제 금액을 확인한 뒤 결제합니다."
+    ],
+    "note": "affiliate_url 과 promo_code 를 채우면 /coupons/gamsgo/ 페이지가 공개(색인)되고, 비워 두면 noindex 초안으로만 생성됩니다."
+  }
+}

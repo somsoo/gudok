@@ -1,0 +1,23 @@
+---
+// 결합·제휴 할인 모음: services.json discounts 를 유형별로 모은다
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { COPY, DEAL_TYPES, SERVICES, TODAY, TYPE_LABEL, svcUrl } from '../../lib/data';
+import { META } from '../../lib/registry';
+
+const m = META.deals;
+const blocks = DEAL_TYPES.map((t) => ({
+  label: TYPE_LABEL[t],
+  rows: SERVICES.flatMap((s) => s.discounts.filter((d) => d.type === t).map((d) => ({ s, d }))),
+})).filter((b) => b.rows.length > 0);
+---
+<Base path={m.path} title={m.title} desc={m.desc} crumbs={[['결합할인', m.path]]} disclosure>
+<article class="doc"><h1>결합·제휴 할인 모음</h1><p class="meta">요금 확인: {TODAY}</p><p class="lead">{COPY.deals_intro}</p>
+<AdSlot pos="top" />
+{blocks.map((b) => (
+<Fragment><h2>{b.label}</h2><div class="table-wrap"><table class="cmp stack"><thead><tr><th>서비스</th><th>방법</th><th>월 부담</th><th>조건</th></tr></thead><tbody>
+{b.rows.map(({ s, d }) => <tr><th scope="row"><a href={svcUrl(s)}>{s.name}</a></th><td data-label="방법">{d.title}</td><td class="num" data-label="월 부담">{d.cost ?? ''}</td><td data-label="조건">{d.cond ?? ''}</td></tr>)}
+</tbody></table></div></Fragment>
+))}
+<p class="muted">제휴 조건은 수시로 바뀝니다. 가입 전 각 결제처의 상품 페이지에서 제공 이용권과 기간을 꼭 확인하세요.</p></article>
+</Base>

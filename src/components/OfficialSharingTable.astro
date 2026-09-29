@@ -1,0 +1,13 @@
+---
+// 서비스별 공식 공유 방법 (discounts 의 sharing_official)
+import { SERVICES, svcUrl } from '../lib/data';
+
+const rows = SERVICES.flatMap((s) => s.discounts.filter((d) => d.type === 'sharing_official').map((d) => ({ s, d })));
+---
+{rows.length > 0 && (
+<div class="table-wrap"><table class="cmp stack"><thead><tr><th>서비스</th><th>공식 방법</th><th>비용</th><th>조건</th></tr></thead><tbody>
+{rows.map(({ s, d }) => (
+<tr><th scope="row"><a href={svcUrl(s)}>{s.name}</a></th><td data-label="공식 방법">{d.title}</td><td class="num" data-label="비용">{d.cost ?? ''}</td><td data-label="조건">{d.cond ?? ''}</td></tr>
+))}
+</tbody></table></div>
+)}

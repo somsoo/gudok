@@ -1,0 +1,33 @@
+---
+// 비교 글: /compare/<slug>/  (src/content/compare/*.mdx)
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import AdSlot from '../../../components/AdSlot.astro';
+import CompareTable from '../../../components/CompareTable.astro';
+import Faq from '../../../components/Faq.astro';
+import YearCompare from '../../../components/YearCompare.astro';
+import { TODAY, articleLd, faqLd } from '../../../lib/data';
+import { sorted } from '../../../lib/registry';
+
+export async function getStaticPaths() {
+  return (await sorted('compare')).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const path = `/compare/${entry.id}/`;
+---
+<Base path={path} title={d.title} desc={d.desc} crumbs={[['비교', '/compare/'], [d.h1, path]]} ld={[...articleLd(d.h1, d.desc, path), ...faqLd(d.faq)]} disclosure>
+<article class="doc">
+<h1>{d.h1}</h1>
+<p class="meta">요금 확인: {TODAY}</p>
+<p class="lead">{d.intro}</p>
+<AdSlot pos="top" />
+<h2>한눈에 비교</h2>
+<CompareTable ids={d.services} />
+<YearCompare ids={d.services} />
+<Content />
+<Faq items={d.faq} />
+</article>
+</Base>

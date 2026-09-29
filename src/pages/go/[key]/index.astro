@@ -1,0 +1,17 @@
+---
+// /go/<키>/ : Cloudflare Pages 에서는 _redirects 의 서버 302 가 먼저 처리한다. 이 페이지는 다른 호스트용 대비책.
+import { affItems, safeJson, type Affiliate } from '../../../lib/data';
+
+export function getStaticPaths() {
+  return affItems().map(([key, a]) => ({ params: { key }, props: { a } }));
+}
+
+const { a } = Astro.props as { a: Affiliate };
+const target: string = a.affiliate_url || a.official_url;
+---
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow"><meta name="referrer" content="unsafe-url">
+<meta http-equiv="refresh" content={`0;url=${target}`}><title>이동 중…</title>
+<script is:inline set:html={`location.replace(${safeJson(target)});`}></script></head>
+<body><p><a href={target} rel="sponsored nofollow noopener">{`${a.name}(으)로 이동`}</a></p></body></html>

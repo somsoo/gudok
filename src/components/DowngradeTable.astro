@@ -1,0 +1,22 @@
+---
+// 해지 페이지: 가장 비싼 요금제에서 낮출 때 월·연 절약액
+import { officialPlans, planKrw, won, type Plan, type Service } from '../lib/data';
+
+interface Props { s: Service }
+const paid = officialPlans(Astro.props.s)
+  .map((p): [Plan, number] => [p, planKrw(p) ?? 0])
+  .filter(([, v]) => v)
+  .sort((a, b) => a[1] - b[1]);
+const [top, topV] = paid.length >= 2 ? paid[paid.length - 1] : [null, 0];
+const rows = top ? paid.slice(0, -1).filter(([, v]) => v < topV) : [];
+---
+{top && rows.length > 0 && (
+<Fragment>
+<h2>해지 대신 요금제를 낮추면</h2><p>{`지금 ${top.name} 요금제(월 ${won(topV)})를 쓰고 있다면, 해지하지 않고 아래 요금제로 바꾸는 것만으로도 이만큼 줄어듭니다. 요금제를 낮추면 보통 다음 결제일부터 새 요금이 적용됩니다.`}</p>
+<div class="table-wrap"><table class="cmp stack"><thead><tr><th>바꿀 요금제</th><th>월 요금</th><th>월 절약</th><th>1년 절약</th></tr></thead><tbody>
+{rows.map(([p, v]) => (
+<tr><th scope="row">{p.name}</th><td class="num" data-label="월 요금">{won(v)}</td><td class="num" data-label="월 절약">{won(topV - v)}</td><td class="num" data-label="1년 절약"><strong>{won((topV - v) * 12)}</strong></td></tr>
+))}
+</tbody></table></div>
+</Fragment>
+)}

@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import { META, sorted } from '../../lib/registry';
+
+const m = META.compareIndex;
+const items = await sorted('compare');
+---
+<Base path={m.path} title={m.title} desc={m.desc} crumbs={[['비교', m.path]]} ads={false}>
+<article class="doc"><h1>구독 서비스 비교 모음</h1><p class="lead">고민되는 서비스 두세 곳을 요금·동시 시청·콘텐츠 강점 기준으로 나란히 비교한 글입니다.</p><ul class="list">
+{items.map((c) => <li><a href={`/compare/${c.id}/`}>{c.data.h1}</a>{' '}<span class="muted">{c.data.intro}</span></li>)}
+</ul></article>
+</Base>

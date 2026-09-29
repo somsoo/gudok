@@ -1,0 +1,14 @@
+---
+// 해지 페이지: 결합·제휴로 이용 중이면 해당 결제처에서 해지해야 한다는 안내
+import { PARTNER_TYPES, TYPE_LABEL, type Service } from '../lib/data';
+
+interface Props { s: Service }
+const ds = Astro.props.s.discounts.filter((d) => PARTNER_TYPES.includes(d.type));
+---
+{ds.length > 0 && (
+<Fragment>
+<p>아래 결합·제휴 방법으로 이용 중이라면 해지와 변경은 서비스가 아니라 해당 결제처(멤버십·통신사·카드사·결합 상품 판매처)에서 해야 합니다.</p><ul>
+{ds.map((d) => <li><strong>{d.title}</strong>{' '}<span class="muted">{`${TYPE_LABEL[d.type] ?? ''} · ${d.cond ?? ''}`}</span></li>)}
+</ul>
+</Fragment>
+)}
