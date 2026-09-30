@@ -7,6 +7,6 @@ const { s } = Astro.props;
 ---
 <div class="table-wrap"><table class="cmp stack"><thead><tr><th>요금제</th><th>요금</th><th>주요 조건</th></tr></thead><tbody>
 {s.plans.map((p) => (
-<tr><th scope="row">{p.name}{p.check && <Fragment>{' '}<span class="badge mid" title="최근 가격 재확인 필요">확인 필요</span></Fragment>}</th><td class="num" data-label="요금">{fmtPrice(p)}</td><td data-label="주요 조건">{p.feat ?? ''}</td></tr>
+<tr><th scope="row">{p.name}{p.check && <Fragment>{' '}<span class="badge mid" title="최근 가격 재확인 필요">확인 필요</span></Fragment>}</th><td class="num" data-label="요금">{fmtPrice(p)}{p.app_higher && p.price != null && ' · 앱 결제는 더 비쌈'}</td><td data-label="주요 조건">{p.feat ?? ''}</td></tr>
 ))}
 </tbody></table></div>

@@ -1,18 +1,19 @@
 ---
 // 서비스 비교표. <CompareTable ids={['netflix', 'tving']} /> 또는 <CompareTable cat="ai" />
-import { SERVICES, cellPrice, cheapest, officialPlans, svc, svcUrl } from '../lib/data';
+// 가격 칸의 data-price 는 app.js 의 오래된 요금 안전장치가 가릴 칸을 찾는 표시다.
+import { SERVICES, cheapestCell, officialPlans, svc, svcUrl } from '../lib/data';
 
 interface Props { ids?: string[]; cat?: string }
 const { ids: given, cat } = Astro.props;
 const ids = given ?? SERVICES.filter((s) => s.cat === cat).map((s) => s.id);
 const rows = ids.map((i) => {
   const s = svc(i);
-  return { s, low: cheapest(s), noads: cheapest(s, { noAds: true }) };
+  return { s, low: cheapestCell(s), noads: cheapestCell(s, { noAds: true }) };
 });
 const hasAds = rows.some(({ s }) => officialPlans(s).some((p) => p.ads));
 ---
 <div class="table-wrap"><table class="cmp stack"><thead><tr><th>서비스</th><th>공식 최저 유료</th>{hasAds && <th>광고 없는 최저</th>}<th>동시 이용</th><th>강점</th></tr></thead><tbody>
 {rows.map(({ s, low, noads }) => (
-<tr><th scope="row"><a href={svcUrl(s)}>{s.name}</a></th><td data-label="공식 최저 유료">{cellPrice(low)}</td>{hasAds && <td data-label="광고 없는 최저">{cellPrice(noads)}</td>}<td data-label="동시 이용">{s.streams || '—'}</td><td data-label="강점">{s.short}</td></tr>
+<tr><th scope="row"><a href={svcUrl(s)}>{s.name}</a></th><td data-label="공식 최저 유료" data-price>{low}</td>{hasAds && <td data-label="광고 없는 최저" data-price>{noads}</td>}<td data-label="동시 이용">{s.streams || '—'}</td><td data-label="강점">{s.short}</td></tr>
 ))}
 </tbody></table></div>

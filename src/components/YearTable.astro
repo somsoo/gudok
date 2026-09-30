@@ -1,5 +1,5 @@
 ---
-// 요금제별 1년 비용. 달러 요금제는 부가세 10% 포함 추정, 원화 요금제는 앱 결제 1년을 함께 보여준다.
+// 요금제별 1년 비용. 달러 요금제는 부가세 10% 포함 추정, 앱 결제가 더 비싼 원화 요금제는 그 사실을 함께 적는다.
 import { SITE, nf, officialPlans, planKrw, vatKrw, won, type Plan, type Service } from '../lib/data';
 
 interface Props { s: Service }
@@ -12,7 +12,7 @@ for (const p of officialPlans(s)) {
   paid.push([p, v]);
   let note = '—';
   if (p.usd != null) note = `부가세 10%가 붙으면 월 약 ${won(vatKrw(v))}`;
-  else if (p.app_price) note = `앱 결제 시 1년 ${won(p.app_price * 12)} (웹보다 ${won((p.app_price - v) * 12)} 더)`;
+  else if (p.app_higher) note = '앱에서 결제하면 이보다 비쌉니다';
   rows.push({ name: p.name, month: won(v), year: won(v * 12), note });
 }
 let gap = '';

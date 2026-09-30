@@ -224,9 +224,9 @@
         var warns = [];
         var notes = [];
         if (price === null || price === undefined) {
-          score -= 20;
+          score -= noAds ? 20 : 5;
           price = null;
-          warns.push('광고 없는 요금제 정보가 없습니다.');
+          if (noAds) warns.push('광고 없는 요금제 정보가 없습니다.');
         } else if (price <= budget) {
           score += 5;
         } else {
@@ -287,7 +287,7 @@
     var t = Date.parse(v + 'T00:00:00+09:00');
     if (isNaN(t) || (Date.now() - t) / 864e5 < STALE_DAYS) return;
     var cells = [];
-    each(document.querySelectorAll('td.num, .card.svc .price'), function (el) {
+    each(document.querySelectorAll('td.num, td[data-price], .card.svc .price'), function (el) {
       if (PRICE_RE.test(el.textContent)) cells.push(el);
     });
     if (!cells.length) return;
@@ -315,7 +315,32 @@
     b.classList.add('stale');
   }
 
-  function init() { initStale(); initCalc(); initFinder(); }
+  // 요금 변경 의심 안내: 홈서버 주간 점검이 공식 페이지에서 금액을 확인하지 못한 서비스(<body data-hidden-names>)는
+  // 빌드할 때 요금표·카드의 금액을 이미 뺐다. 그 서비스 이름이 본문에 나오는 페이지에만 안내를 띄운다.
+  function initHiddenNote() {
+    var b = document.body;
+    if (b.classList.contains('stale')) return;  // 오래된 요금 안내가 이미 떠 있으면 겹쳐 띄우지 않는다
+    var names = (b.getAttribute('data-hidden-names') || '').split('|').filter(Boolean);
+    var main = document.getElementById('main');
+    if (!names.length || !main) return;
+    var text = main.textContent || '';
+    var hit = names.filter(function (n) { return text.indexOf(n) !== -1; });
+    if (!hit.length) return;
+    var off = b.getAttribute('data-official') || '';
+    var box = document.createElement('div');
+    box.className = 'stale-note';
+    box.setAttribute('role', 'note');
+    box.innerHTML = '<strong>요금이 바뀐 것으로 보입니다.</strong> ' + esc(hit.join(', ')) +
+      '의 요금이 공식 페이지와 달라 보여 표의 금액을 가리고 새 요금을 확인하고 있습니다. ' +
+      '본문에 적힌 금액도 결제 전에 공식 요금 페이지에서 확인하세요.' +
+      (off ? ' <a href="' + esc(off) + '" rel="nofollow noopener" target="_blank">공식 요금 보기</a>' : '');
+    var h1 = document.querySelector('#main h1');
+    if (h1 && h1.parentNode) h1.parentNode.insertBefore(box, h1.nextSibling);
+    else main.insertBefore(box, main.firstChild);
+    b.classList.add('price-hidden');
+  }
+
+  function init() { initStale(); initHiddenNote(); initCalc(); initFinder(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();

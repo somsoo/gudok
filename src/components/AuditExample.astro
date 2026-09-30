@@ -1,13 +1,13 @@
 ---
-// 구독 점검 가이드용 예시: 흔한 구독 조합을 바꾸기 전·후로 계산
-import { bundle, bundleSep, planKrw, planOf, won } from '../lib/data';
+// 구독 점검 가이드용 예시: 흔한 구독 조합을 바꾸기 전·후로 계산 (매주 확인되는 공식 웹 요금만 사용)
+// 가격 토큰 값(tokenValue)을 쓰므로 어떤 서비스 금액을 잠시 가려도 예시 표가 깨지지 않는다.
+import { tokenValue, won } from '../lib/data';
 
-const tw = bundle('tving_wavve');
 const items: [string, number, string, number][] = [
-  ['넷플릭스 스탠다드', planKrw(planOf('netflix', '스탠다드'))!, '광고형 스탠다드로 변경', planKrw(planOf('netflix', '광고형 스탠다드'))!],
-  ['유튜브 프리미엄(아이폰 앱 결제)', planOf('youtube-premium', '프리미엄').app_price!, '웹 결제로 변경', planKrw(planOf('youtube-premium', '프리미엄'))!],
-  ['티빙 스탠다드 + 웨이브 스탠다드', bundleSep(tw), '더블 이용권으로 묶기', tw.price],
-  ['ChatGPT Plus', planKrw(planOf('chatgpt', 'Plus'))!, '자주 쓰므로 유지', planKrw(planOf('chatgpt', 'Plus'))!],
+  ['넷플릭스 스탠다드', tokenValue('p:netflix:스탠다드'), '광고형 스탠다드로 변경', tokenValue('p:netflix:광고형 스탠다드')],
+  ['유튜브 프리미엄', tokenValue('p:youtube-premium:프리미엄'), '음악은 다른 앱으로 들으니 프리미엄 라이트로 변경', tokenValue('p:youtube-premium:프리미엄 라이트')],
+  ['티빙 스탠다드 + 웨이브 스탠다드', tokenValue('bs:tving_wavve'), '더블 이용권으로 묶기', tokenValue('b:tving_wavve')],
+  ['ChatGPT Plus', tokenValue('p:chatgpt:Plus'), '자주 쓰므로 유지', tokenValue('p:chatgpt:Plus')],
 ];
 const before = items.reduce((t, x) => t + x[1], 0);
 const after = items.reduce((t, x) => t + x[3], 0);
@@ -17,4 +17,4 @@ const after = items.reduce((t, x) => t + x[3], 0);
 <tr><th scope="row">{a}</th><td class="num" data-label="지금 월 요금">{won(b)}</td><td data-label="바꾸는 방법">{c}</td><td class="num" data-label="바꾼 뒤">{won(d)}</td></tr>
 ))}
 </tbody></table></div>
-<p>이 예시에서는 한 달 {won(before)}이던 구독료가 {won(after)}으로 줄어 <strong>매달 {won(before - after)}, 1년 {won((before - after) * 12)}</strong>을 아낍니다. 해지한 서비스가 하나도 없는데도 결제 경로와 요금제, 묶음만 바꿔서 생긴 차이입니다.</p>
+<p>이 예시에서는 한 달 {won(before)}이던 구독료가 {won(after)}으로 줄어 <strong>매달 {won(before - after)}, 1년 {won((before - after) * 12)}</strong>을 아낍니다. 해지한 서비스가 하나도 없는데도 요금제와 묶음만 바꿔서 생긴 차이입니다.</p>

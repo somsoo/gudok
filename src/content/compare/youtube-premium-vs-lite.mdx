@@ -19,7 +19,7 @@ import Price from '../../components/Price.astro';
 <thead><tr><th>구분</th><th>프리미엄</th><th>프리미엄 라이트</th><th>유튜브 뮤직 프리미엄</th></tr></thead>
 <tbody>
 <tr><th scope="row">웹 결제</th><td data-label="프리미엄" class="num">월 <Price t="p:youtube-premium:프리미엄" />원</td><td data-label="프리미엄 라이트" class="num">월 <Price t="p:youtube-premium:프리미엄 라이트" />원</td><td data-label="유튜브 뮤직 프리미엄" class="num">월 <Price t="p:youtube-music:유튜브 뮤직 프리미엄" />원</td></tr>
-<tr><th scope="row">아이폰 앱 결제</th><td data-label="프리미엄" class="num">월 <Price t="a:youtube-premium:프리미엄" />원</td><td data-label="프리미엄 라이트" class="num">월 <Price t="a:youtube-premium:프리미엄 라이트" />원</td><td data-label="유튜브 뮤직 프리미엄" class="num">월 <Price t="a:youtube-music:유튜브 뮤직 프리미엄" />원</td></tr>
+<tr><th scope="row">아이폰 앱 결제</th><td data-label="프리미엄">웹보다 비쌈</td><td data-label="프리미엄 라이트">웹보다 비쌈</td><td data-label="유튜브 뮤직 프리미엄">웹보다 비쌈</td></tr>
 <tr><th scope="row">유튜브 영상 광고 제거</th><td data-label="프리미엄">O</td><td data-label="프리미엄 라이트">O(비음악 영상, 일부 광고 가능)</td><td data-label="유튜브 뮤직 프리미엄">X</td></tr>
 <tr><th scope="row">백그라운드·오프라인 저장</th><td data-label="프리미엄">O</td><td data-label="프리미엄 라이트">O(비음악 영상)</td><td data-label="유튜브 뮤직 프리미엄">O(음악)</td></tr>
 <tr><th scope="row">유튜브 뮤직 앱</th><td data-label="프리미엄">O</td><td data-label="프리미엄 라이트">X</td><td data-label="유튜브 뮤직 프리미엄">O</td></tr>
@@ -36,6 +36,8 @@ import Price from '../../components/Price.astro';
 <ol>
 <li>지난 한 달 동안 유튜브로 음악을 들은 시간이 많았는지 떠올려 보세요. 거의 없다면 라이트로 충분합니다.</li>
 <li>음악을 들었다면 다른 음악 앱을 따로 결제하고 있는지 확인하세요. 따로 내고 있다면 프리미엄 하나로 합치는 편이 쌉니다.</li>
-<li>결제는 어떤 멤버십이든 앱이 아닌 웹에서 하세요. 프리미엄 기준 아이폰 앱 결제보다 월 <Price t="ad:youtube-premium:프리미엄" />원, 1년이면 <Price t="ad:youtube-premium:프리미엄:x12" />원이 쌉니다.</li>
+<li>결제는 어떤 멤버십이든 앱이 아닌 웹에서 하세요. 아이폰 앱(App Store)에서 결제하면 같은 멤버십이 더 비쌉니다.</li>
 </ol>
 <p>아이폰이라면 어떤 멤버십이든 앱이 아닌 웹에서 결제하세요. <a href="/guides/web-vs-app-payment/">웹 결제 방법</a></p>
+<h2>멤버십을 바꾸려면</h2>
+<p>youtube.com/paid_memberships 에 접속해 지금 쓰는 멤버십의 '멤버십 관리'를 열고 변경 메뉴가 있는지 확인하세요. 변경 메뉴가 없으면 지금 멤버십을 해지하고 결제 기간이 끝난 뒤 새 멤버십으로 가입하면 됩니다. 아이폰 앱에서 결제 중이라면 App Store에서 먼저 해지해야 두 곳에서 요금이 나가지 않습니다.</p>

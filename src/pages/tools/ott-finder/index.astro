@@ -4,7 +4,7 @@ import Base from '../../../layouts/Base.astro';
 import AdSlot from '../../../components/AdSlot.astro';
 import Faq from '../../../components/Faq.astro';
 import FinderGuide from '../../../partials/finder-guide.mdx';
-import { COPY, TODAY, faqLd, finderData, safeJson, webAppLd } from '../../../lib/data';
+import { COPY, OLDEST_VERIFIED, faqLd, finderData, safeJson, webAppLd } from '../../../lib/data';
 import { META } from '../../../lib/registry';
 
 const m = META.finder;
@@ -22,7 +22,7 @@ const ld = [...webAppLd('나에게 맞는 OTT 찾기', m.path, 'UtilityApplicati
 ))}
 <p class="actions"><button type="button" class="btn btn-primary" id="finder-go">추천 받기</button> <button type="button" class="btn" id="finder-reset">다시 고르기</button></p>
 <div id="finder-result" aria-live="polite"></div></form>
-<p class="muted">※ 요금 데이터와 서비스 강점 기준의 참고용 추천입니다. 요금 확인 {TODAY}.</p>
+<p class="muted">※ 요금 데이터와 서비스 강점 기준의 참고용 추천입니다. 요금 확인 {OLDEST_VERIFIED}.</p>
 <FinderGuide />
 <Faq items={COPY.finder.faq} />
 </article>

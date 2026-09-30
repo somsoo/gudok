@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
 import ServiceCard from '../components/ServiceCard.astro';
-import { BASE, BRAND, CAT_ORDER, COPY, SERVICES, SITE, TODAY, cellPrice, cheapest, svcUrl } from '../lib/data';
+import { BASE, BRAND, CAT_ORDER, COPY, OLDEST_VERIFIED, SERVICES, SITE, cheapestCell, svcUrl } from '../lib/data';
 import { META, sorted } from '../lib/registry';
 
 const m = META.home;
@@ -20,9 +20,9 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: BRAND,
 </section>
 <AdSlot pos="top" />
 <section><h2>서비스별 공식 최저가와 절약 포인트</h2>
-<p class="meta">요금 확인: {TODAY}</p>
+<p class="meta">요금 확인: {OLDEST_VERIFIED}</p>
 <div class="table-wrap"><table class="cmp stack"><thead><tr><th>서비스</th><th>공식 최저 유료 요금제</th><th>더 싸게 쓰는 방법</th></tr></thead><tbody>
-{SERVICES.map((s) => <tr><th scope="row"><a href={svcUrl(s)}>{s.name}</a></th><td data-label="공식 최저 유료 요금제">{cellPrice(cheapest(s))}</td><td data-label="더 싸게 쓰는 방법">{s.quick.cheapest}</td></tr>)}
+{SERVICES.map((s) => <tr><th scope="row"><a href={svcUrl(s)}>{s.name}</a></th><td data-label="공식 최저 유료 요금제" data-price>{cheapestCell(s)}</td><td data-label="더 싸게 쓰는 방법">{s.quick.cheapest}</td></tr>)}
 </tbody></table></div>
 </section>
 {CAT_ORDER.map((cat) => (

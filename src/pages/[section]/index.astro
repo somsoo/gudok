@@ -6,7 +6,7 @@ import AdSlot from '../../components/AdSlot.astro';
 import CompareTable from '../../components/CompareTable.astro';
 import ServiceCard from '../../components/ServiceCard.astro';
 import YearCompare from '../../components/YearCompare.astro';
-import { SERVICES, SITE, TODAY, articleLd, nf } from '../../lib/data';
+import { SERVICES, SITE, articleLd, nf, verifiedOf } from '../../lib/data';
 import { sorted } from '../../lib/registry';
 
 export async function getStaticPaths() {
@@ -22,12 +22,13 @@ const path = `/${entry.id}/`;
 const d = entry.data;
 const svcs = kind === 'category' ? SERVICES.filter((s) => s.cat === entry.id) : [];
 const ids = svcs.map((s) => s.id);
+const verified = verifiedOf(svcs);
 ---
 {kind === 'category' ? (
-<Base path={path} title={d.title} desc={d.desc} crumbs={[['name' in d ? d.name : d.h1, path]]} ld={articleLd(d.h1, d.desc, path)} disclosure>
+<Base path={path} title={d.title} desc={d.desc} crumbs={[['name' in d ? d.name : d.h1, path]]} ld={articleLd(d.h1, d.desc, path)} disclosure verified={verified}>
 <article class="doc">
 <h1>{d.h1}</h1>
-<p class="meta">요금 확인: {TODAY} · 원화 환산 기준 1달러={nf(SITE.usd_krw)}원</p>
+<p class="meta">요금 확인: {verified} · 원화 환산 기준 1달러={nf(SITE.usd_krw)}원</p>
 <p class="lead">{'intro' in d ? d.intro : ''}</p>
 <AdSlot pos="top" />
 <h2>요금 한눈에 비교</h2>

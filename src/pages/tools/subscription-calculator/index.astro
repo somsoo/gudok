@@ -4,7 +4,7 @@ import Base from '../../../layouts/Base.astro';
 import AdSlot from '../../../components/AdSlot.astro';
 import Faq from '../../../components/Faq.astro';
 import CalcGuide from '../../../partials/calc-guide.mdx';
-import { CAT_ORDER, COPY, SITE, TODAY, calcData, faqLd, nf, safeJson, webAppLd } from '../../../lib/data';
+import { CAT_ORDER, COPY, OLDEST_VERIFIED, SITE, calcData, faqLd, nf, safeJson, webAppLd } from '../../../lib/data';
 import { META, categoryName } from '../../../lib/registry';
 
 const m = META.calc;
@@ -32,7 +32,7 @@ const ld = [...webAppLd('내 구독료 계산기', m.path, 'FinanceApplication')
 <p class="actions"><button type="button" class="btn btn-primary" id="calc-share">결과 공유하기</button> <button type="button" class="btn" id="calc-reset">초기화</button></p>
 </div>
 </div>
-<p class="muted">※ 요금 데이터 기준 모의 계산입니다. 달러 요금은 1달러={nf(SITE.usd_krw)}원으로 환산했으며 부가세·해외 결제 수수료는 포함하지 않았습니다. 요금 확인 {TODAY}.</p>
+<p class="muted">※ 요금 데이터 기준 모의 계산입니다. 달러 요금은 1달러={nf(SITE.usd_krw)}원으로 환산했으며 부가세·해외 결제 수수료는 포함하지 않았습니다. 요금 확인 {OLDEST_VERIFIED}.</p>
 <CalcGuide />
 <Faq items={COPY.calc_faq} />
 </article>

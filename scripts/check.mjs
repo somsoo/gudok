@@ -1,4 +1,4 @@
-// 빌드 후 점검 (npm run build 가 astro build 다음에 실행). 깨진 내부 링크가 있으면 실패(exit 1)한다.
+// 빌드 후 점검 (npm run build 가 astro build 다음에 실행). 깨진 내부 링크나 가격 원칙 위반(제휴·앱 결제 금액)이 있으면 실패(exit 1)한다.
 // 경고: H1 1개 · 광고 ins 0/2개 · 색인 콘텐츠 페이지 본문 1,200자 이상 · title 40자 · description 80자 · 연락처
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
@@ -59,7 +59,23 @@ for (const f of pages) {
 }
 if (!site.contact_email) warn.push("site.json contact_email 이 비어 있음 → 소개·개인정보처리방침 페이지에 연락처가 '준비 중'으로 표시됩니다.");
 
+// 가격 원칙: 매주 확인할 수 있는 금액만 적는다. 제휴처(카드·통신사·멤버십·프로모션)가 정하는 금액과
+// 앱 결제 금액(app_price)은 홈서버 점검이 확인할 수 없으므로 들어오면 빌드를 멈춘다.
+const services = JSON.parse(readFileSync(join(ROOT, 'data', 'services.json'), 'utf8')).services;
+const AMOUNT = /\d[\d,]*\s?원|\$\s?\d|\d+(?:\.\d+)?\s?%/;
+const errors = [];
+for (const s of services) {
+  for (const d of s.discounts ?? []) {
+    if (['membership', 'card', 'carrier', 'promo'].includes(d.type) && (AMOUNT.test(d.cost ?? '') || AMOUNT.test(d.desc ?? ''))) {
+      errors.push(`제휴·프로모션 금액은 적지 않습니다: ${s.id} / ${d.title}`);
+    }
+  }
+  for (const p of s.plans ?? []) if (p.app_price != null) errors.push(`앱 결제 금액(app_price)은 적지 않습니다(app_higher 사용): ${s.id} / ${p.name}`);
+  if (s.price_hidden) warn.push(`금액 가림 중(price_hidden ${s.price_hidden}): ${s.id} → 공식 요금을 확인해 고친 뒤 price_hidden 을 지우세요.`);
+}
+
 console.log(`pages: ${pages.length} (indexable ${indexed.size}, noindex ${pages.length - indexed.size}) → ${DIST}`);
 for (const w of warn) console.log('WARN', w);
 for (const m of [...missing].sort()) console.log('BROKEN LINK', m);
-if (missing.size) process.exit(1);
+for (const e of errors) console.log('ERROR', e);
+if (missing.size || errors.length) process.exit(1);

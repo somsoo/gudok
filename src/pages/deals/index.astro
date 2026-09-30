@@ -2,7 +2,7 @@
 // 결합·제휴 할인 모음: services.json discounts 를 유형별로 모은다
 import Base from '../../layouts/Base.astro';
 import AdSlot from '../../components/AdSlot.astro';
-import { COPY, DEAL_TYPES, SERVICES, TODAY, TYPE_LABEL, svcUrl } from '../../lib/data';
+import { COPY, DEAL_TYPES, OLDEST_VERIFIED, SERVICES, TYPE_LABEL, svcUrl } from '../../lib/data';
 import { META } from '../../lib/registry';
 
 const m = META.deals;
@@ -12,7 +12,7 @@ const blocks = DEAL_TYPES.map((t) => ({
 })).filter((b) => b.rows.length > 0);
 ---
 <Base path={m.path} title={m.title} desc={m.desc} crumbs={[['결합할인', m.path]]} disclosure>
-<article class="doc"><h1>결합·제휴 할인 모음</h1><p class="meta">요금 확인: {TODAY}</p><p class="lead">{COPY.deals_intro}</p>
+<article class="doc"><h1>결합·제휴 할인 모음</h1><p class="meta">요금 확인: {OLDEST_VERIFIED}</p><p class="lead">{COPY.deals_intro}</p>
 <AdSlot pos="top" />
 {blocks.map((b) => (
 <Fragment><h2>{b.label}</h2><div class="table-wrap"><table class="cmp stack"><thead><tr><th>서비스</th><th>방법</th><th>월 부담</th><th>조건</th></tr></thead><tbody>

@@ -4,6 +4,9 @@ import { cheapest, fmtPrice, svcUrl, type Service } from '../lib/data';
 interface Props { s: Service }
 const { s } = Astro.props;
 const low = cheapest(s);
-const price = low ? fmtPrice(low) : '무료 요금제 있음';
+// 가린 서비스(price_hidden)와 금액을 적지 않은 유료 요금제만 있는 서비스는 금액 대신 안내 문구를 보여 준다.
+const price = s.price_hidden ? '공식 요금 확인'
+  : low ? `${fmtPrice(low)}~`
+  : s.plans.some((p) => p.price === 0) ? '무료 요금제 있음' : '공식 요금 확인';
 ---
-<a class="card svc" href={svcUrl(s)}><strong>{s.name}</strong><span class="muted">{s.short}</span><span class="price">{`${price}~`}</span></a>
+<a class="card svc" href={svcUrl(s)}><strong>{s.name}</strong><span class="muted">{s.short}</span><span class="price">{price}</span></a>
