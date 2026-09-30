@@ -29,6 +29,8 @@ export const BASE: string = SITE.base_url.replace(/\/+$/, '');
 export const BRAND: string = SITE.brand;
 export const TODAY: string = SITE.last_reviewed;
 export const VER = TODAY.replaceAll('-', '');
+/** 여러 서비스 가격이 함께 나오는 페이지의 기준일: 가장 오래된 verified_at. 오래된 요금 안전장치(app.js initStale)가 쓴다. */
+export const OLDEST_VERIFIED: string = SERVICES.map((s) => s.verified_at).filter(Boolean).sort()[0] ?? TODAY;
 
 export const CAT_ORDER = ['ott', 'music', 'ai'];
 export const TYPE_LABEL: Record<string, string> = {

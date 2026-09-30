@@ -18,7 +18,7 @@ const c = s.cancel;
 const crumbs: [string, string][] = [[await categoryName(s.cat), `/${s.cat}/`], [s.name, svcUrl(s)], ['해지 방법', path]];
 const ld = [...articleLd(`${s.name} 해지·환불 방법`, desc, path), ...faqLd(COPY.cancel.faq)];
 ---
-<Base path={path} title={title} desc={desc} crumbs={crumbs} ld={ld}>
+<Base path={path} title={title} desc={desc} crumbs={crumbs} ld={ld} verified={s.verified_at} official={s.official_url}>
 <article class="doc">
 <h1>{s.name} 해지·환불 방법</h1>
 <p class="meta">최종 확인: {s.verified_at} · 메뉴 이름은 앱 업데이트에 따라 조금씩 달라질 수 있습니다.</p>

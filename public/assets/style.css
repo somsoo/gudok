@@ -98,6 +98,9 @@ li { margin: .3em 0; }
 .method h3 { margin-top: 0; }
 .method p:last-child { margin-bottom: 0; }
 .method.warn { border-left-color: #d97706; }
+/* 오래된 요금 안내 (app.js initStale) */
+.stale-note { border: 2px solid #d97706; background: var(--mid-bg); color: var(--mid); border-radius: var(--radius); padding: 12px 16px; margin: 12px 0 20px; }
+.stale-note a { color: inherit; font-weight: 700; }
 
 /* 표 */
 .table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--line); border-radius: var(--radius); margin: 12px 0 20px; }

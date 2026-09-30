@@ -275,7 +275,47 @@
     }
   }
 
-  function init() { initCalc(); initFinder(); }
+  // 오래된 요금 안전장치: <body data-verified="YYYY-MM-DD">로부터 STALE_DAYS가 지나면
+  // 표·카드의 금액을 '공식 요금 확인'으로 바꾸고 제목 아래에 안내를 띄운다.
+  // 재배포 없이 방문자 브라우저에서 동작하므로, 가격 확인이 끊겨도 틀린 금액이 그대로 나가지 않는다.
+  var STALE_DAYS = 180;
+  var PRICE_RE = /[0-9][0-9,.]*\s*원|\$\s?[0-9]/;
+  function initStale() {
+    var b = document.body;
+    var v = b.getAttribute('data-verified') || '';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) return;
+    var t = Date.parse(v + 'T00:00:00+09:00');
+    if (isNaN(t) || (Date.now() - t) / 864e5 < STALE_DAYS) return;
+    var cells = [];
+    each(document.querySelectorAll('td.num, .card.svc .price'), function (el) {
+      if (PRICE_RE.test(el.textContent)) cells.push(el);
+    });
+    if (!cells.length) return;
+    var off = b.getAttribute('data-official') || '';
+    var link = off ? '<a href="' + esc(off) + '" rel="nofollow noopener" target="_blank">공식 요금 확인</a>' : '공식 요금 확인';
+    each(cells, function (el) {
+      // 서비스 카드는 카드 전체가 링크라 그 안에 링크를 또 넣지 않는다.
+      if (el.closest && el.closest('a')) el.textContent = '공식 요금 확인';
+      else el.innerHTML = link;
+    });
+    var d = v.split('-');
+    var box = document.createElement('div');
+    box.className = 'stale-note';
+    box.setAttribute('role', 'note');
+    box.innerHTML = '<strong>요금이 바뀌었을 수 있습니다.</strong> 이 페이지의 요금은 ' +
+      d[0] + '년 ' + Number(d[1]) + '월 ' + Number(d[2]) + '일에 확인한 값이라 표의 금액을 가렸습니다. ' +
+      '본문에 적힌 금액도 결제 전에 공식 요금 페이지에서 확인하세요.' +
+      (off ? ' <a href="' + esc(off) + '" rel="nofollow noopener" target="_blank">공식 요금 보기</a>' : '');
+    var h1 = document.querySelector('#main h1');
+    if (h1 && h1.parentNode) h1.parentNode.insertBefore(box, h1.nextSibling);
+    else {
+      var main = document.getElementById('main');
+      if (main) main.insertBefore(box, main.firstChild);
+    }
+    b.classList.add('stale');
+  }
+
+  function init() { initStale(); initCalc(); initFinder(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();

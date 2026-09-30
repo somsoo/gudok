@@ -24,7 +24,7 @@ const sharingCta = Boolean(s.sharing_platform) && couponLive('gamsgo');
 const crumbs: [string, string][] = [[await categoryName(s.cat), `/${s.cat}/`], [s.name, path]];
 const ld = [...articleLd(`${s.name} 요금제·할인 총정리`, desc, path), ...faqLd(s.faq)];
 ---
-<Base path={path} title={title} desc={desc} crumbs={crumbs} ld={ld} disclosure>
+<Base path={path} title={title} desc={desc} crumbs={crumbs} ld={ld} disclosure verified={s.verified_at} official={s.official_url}>
 <article class="doc">
 <h1>{s.name} 요금제·할인 총정리</h1>
 <p class="meta">요금 확인: {s.verified_at} · 출처: <Ext url={s.source_url} label={s.source_note} /> · <Ext url={s.official_url} label="공식 사이트" /></p>

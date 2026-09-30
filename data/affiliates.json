@@ -1,7 +1,8 @@
 {
   "_help": {
     "fields": "name, kind(sharing_platform=쿠폰 페이지 생성 / 그 외=CTA만), official_url, affiliate_url, promo_code, promo_benefit, code_checked_at(YYYY-MM-DD), how_to_apply[], cta_label, disclosure(쿠팡 파트너스 등 지정 문구), placements[{service: 서비스 id 또는 *, type: official|annual|web|bundle|membership|carrier|card|promo|team|sharing_official|sharing_platform, label}]",
-    "flow": "affiliate_url 을 채우면 /go/<키>/ 가 제휴 링크로 바뀌고, placements 에 적은 서비스·할인 유형 블록에 버튼이 붙습니다. 수정 후 npm run build"
+    "flow": "affiliate_url 을 채우면 /go/<키>/ 가 제휴 링크로 바뀌고, placements 에 적은 서비스·할인 유형 블록에 버튼이 붙습니다. 수정 후 npm run build",
+    "rule": "기간 한정 CPA 캠페인(예: 텐핑 폰가비)은 넣지 않습니다. 끝나면 버튼이 종료 화면으로 가는데 이 사이트는 손을 대지 않는 운영이 원칙이라서입니다. 상시 제휴(겜스고, 쿠팡 파트너스)만 쓰고, 쿠팡은 개별 상품 대신 검색 결과 링크로 겁니다."
   },
   "gamsgo": {
     "name": "겜스고(GamsGo)",

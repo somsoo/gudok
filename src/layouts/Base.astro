@@ -1,7 +1,7 @@
 ---
 import AdSlot from '../components/AdSlot.astro';
 import Ext from '../components/Ext.astro';
-import { BASE, BRAND, DISCLOSURE_TEXT, NAV, SITE, TODAY, VER, safeJson } from '../lib/data';
+import { BASE, BRAND, DISCLOSURE_TEXT, NAV, OLDEST_VERIFIED, SITE, TODAY, VER, safeJson } from '../lib/data';
 
 interface Props {
   path: string;
@@ -13,9 +13,13 @@ interface Props {
   /** 애드센스: DESIGN_CHECKLIST 기준 페이지당 정확히 2개. 상단은 각 페이지가 리드 문단 뒤에 <AdSlot pos="top" />로 넣고, 하단은 여기서 넣는다. */
   ads?: boolean;
   disclosure?: boolean;
+  /** 이 페이지 요금의 확인일(YYYY-MM-DD). 없으면 전체 서비스 중 가장 오래된 확인일. 180일이 지나면 app.js 가 요금 칸을 '공식 요금 확인'으로 바꾼다. */
+  verified?: string;
+  /** 오래된 요금 안내에서 연결할 공식 요금 페이지 */
+  official?: string;
 }
 
-const { path, title, desc, crumbs, ld = [], noindex = false, ads = true, disclosure = false } = Astro.props;
+const { path, title, desc, crumbs, ld = [], noindex = false, ads = true, disclosure = false, verified, official } = Astro.props;
 const url = BASE + path;
 const items: [string, string][] | null = crumbs ? [['홈', '/'], ...crumbs] : null;
 const lds: object[] = [];
@@ -64,7 +68,7 @@ const sisters: { name: string; url: string }[] = SITE.sister_sites ?? [];
 <style is:inline id="layout-shield">html,body{max-width:100%;overflow-x:hidden}.manual-ad-box{width:100%;max-width:960px;margin-left:auto;margin-right:auto;text-align:center;overflow:hidden}.manual-ad-box ins{max-width:100%!important;overflow:hidden!important}</style>
 {lds.map((x) => <script is:inline type="application/ld+json" set:html={safeJson(x)}></script>)}
 </head>
-<body>
+<body data-verified={verified ?? OLDEST_VERIFIED} data-official={official}>
 <a class="skip" href="#main">본문 바로가기</a>
 <header class="site-header"><div class="wrap">
 <a class="logo" href="/"><span class="logo-mark" aria-hidden="true">₩</span>{BRAND}</a>
