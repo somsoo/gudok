@@ -1,11 +1,13 @@
 ---
 // 해지·환불 가이드: /<카테고리>/<서비스>/cancel/
+// 해지 절차는 홈서버 주간 점검이 확인하지 않는다. 그래서 4주마다 바뀌는 요금 확인일(verified_at)이 아니라
+// 사이트 내용 검토일(site.json last_reviewed)을 해지 절차 기준일로 보여 준다. 요금 확인일은 아래 공통 안내에 나온다.
 import Base from '../../../../layouts/Base.astro';
 import AdSlot from '../../../../components/AdSlot.astro';
 import DowngradeTable from '../../../../components/DowngradeTable.astro';
 import Faq from '../../../../components/Faq.astro';
 import PartnerList from '../../../../components/PartnerList.astro';
-import { COPY, SERVICES, articleLd, faqLd, svcUrl, type Service } from '../../../../lib/data';
+import { COPY, SERVICES, TODAY, articleLd, faqLd, svcUrl, type Service } from '../../../../lib/data';
 import { cancelMeta, categoryName } from '../../../../lib/registry';
 
 export function getStaticPaths() {
@@ -18,10 +20,10 @@ const c = s.cancel;
 const crumbs: [string, string][] = [[await categoryName(s.cat), `/${s.cat}/`], [s.name, svcUrl(s)], ['해지 방법', path]];
 const ld = [...articleLd(`${s.name} 해지·환불 방법`, desc, path), ...faqLd(COPY.cancel.faq)];
 ---
-<Base path={path} title={title} desc={desc} crumbs={crumbs} ld={ld} verified={s.verified_at} official={s.official_url}>
+<Base path={path} title={title} desc={desc} crumbs={crumbs} ld={ld} verified={s.price_check === 'none' ? '' : s.verified_at} official={s.official_url}>
 <article class="doc">
 <h1>{s.name} 해지·환불 방법</h1>
-<p class="meta">최종 확인: {s.verified_at} · 메뉴 이름은 앱 업데이트에 따라 조금씩 달라질 수 있습니다.</p>
+<p class="meta">해지 절차: {TODAY} 기준 · 메뉴 이름은 앱 업데이트에 따라 조금씩 달라질 수 있습니다.</p>
 <p class="lead">{s.name} 구독을 결제한 경로(웹·App Store·Google Play·제휴사)별 해지 순서와 해지 뒤 이용 기간, 환불 기준을 정리했습니다.</p>
 <AdSlot pos="top" />
 <div class="summary-box"><h2>먼저 확인할 것: 어디서 결제했나요?</h2>

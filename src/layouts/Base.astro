@@ -13,14 +13,15 @@ interface Props {
   /** 애드센스: DESIGN_CHECKLIST 기준 페이지당 정확히 2개. 상단은 각 페이지가 리드 문단 뒤에 <AdSlot pos="top" />로 넣고, 하단은 여기서 넣는다. */
   ads?: boolean;
   disclosure?: boolean;
-  /** 이 페이지 요금의 확인일(YYYY-MM-DD). 없으면 전체 서비스 중 가장 오래된 확인일. 180일이 지나면 app.js 가 요금 칸을 '공식 요금 확인'으로 바꾼다. */
+  /** 이 페이지 요금의 확인일(YYYY-MM-DD). 없으면 전체 서비스 중 가장 오래된 확인일. 70일이 지나면 app.js 가 요금 칸을 '공식 요금 확인'으로 바꾼다.
+   *  빈 문자열이면 자동 점검하는 금액이 없는 페이지(쿠팡플레이)라 확인일을 쓰지 않고 안전장치도 켜지 않는다. */
   verified?: string;
   /** 오래된 요금 안내에서 연결할 공식 요금 페이지 */
   official?: string;
 }
 
 const { path, title, desc, crumbs, ld = [], noindex = false, ads = true, disclosure = false, verified, official } = Astro.props;
-const pageVerified = verified ?? OLDEST_VERIFIED;
+const pageVerified = verified === '' ? '' : (verified ?? OLDEST_VERIFIED);
 const url = BASE + path;
 const items: [string, string][] | null = crumbs ? [['홈', '/'], ...crumbs] : null;
 const lds: object[] = [];
@@ -69,7 +70,7 @@ const sisters: { name: string; url: string }[] = SITE.sister_sites ?? [];
 <style is:inline id="layout-shield">html,body{max-width:100%;overflow-x:hidden}.manual-ad-box{width:100%;max-width:960px;margin-left:auto;margin-right:auto;text-align:center;overflow:hidden}.manual-ad-box ins{max-width:100%!important;overflow:hidden!important}</style>
 {lds.map((x) => <script is:inline type="application/ld+json" set:html={safeJson(x)}></script>)}
 </head>
-<body data-verified={pageVerified} data-official={official} data-hidden-names={HIDDEN_NAMES.length ? HIDDEN_NAMES.join('|') : undefined}>
+<body data-verified={pageVerified || undefined} data-official={official} data-hidden-names={HIDDEN_NAMES.length ? HIDDEN_NAMES.join('|') : undefined}>
 <a class="skip" href="#main">본문 바로가기</a>
 <header class="site-header"><div class="wrap">
 <a class="logo" href="/"><span class="logo-mark" aria-hidden="true">₩</span>{BRAND}</a>
@@ -85,7 +86,7 @@ const sisters: { name: string; url: string }[] = SITE.sister_sites ?? [];
 </main>
 <footer class="site-footer"><div class="wrap">
 <p class="foot-links"><a href="/about/">소개</a> · <a href="/editorial-policy/">편집 원칙</a> · <a href="/disclosure/">제휴·광고 고지</a> · <a href="/privacy/">개인정보처리방침</a> · <a href="/terms/">이용약관</a></p>
-<p class="muted">요금 정보는 {pageVerified} 기준으로 확인했으며 서비스사 사정에 따라 바뀔 수 있습니다. 최종 가격은 각 공식 페이지에서 확인하세요.</p>
+<p class="muted">{pageVerified ? `요금 정보는 ${pageVerified} 기준으로 확인했으며 서비스사 사정에 따라 바뀔 수 있습니다.` : '요금과 혜택은 서비스사 사정에 따라 바뀔 수 있습니다.'} 최종 가격은 각 공식 페이지에서 확인하세요.</p>
 <p class="muted">{DISCLOSURE_TEXT}</p>
 <p class="muted">서비스명과 상표는 각 권리자의 소유입니다.{sisters.length > 0 && <Fragment>{' 함께 쓰면 좋은 도구: '}{sisters.map((x, i) => <Fragment>{i > 0 && ' · '}<Ext url={x.url} label={x.name} /></Fragment>)}</Fragment>}</p>
 <p class="muted">© {BRAND} · <Ext url={SITE.network_url ?? 'https://enjoy-onepage.com/'} label={SITE.network_name ?? 'Enjoy OnePage'} /></p>
