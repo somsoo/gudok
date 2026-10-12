@@ -368,6 +368,7 @@
       "official_url": "https://chatgpt.com/",
       "source_url": "https://chatgpt.com/ko-KR/pricing/", "source_note": "ChatGPT 한국 요금 안내(원화 표시)",
       "verified_at": "2026-09-30",
+      "price_hidden": "2026-10-12",
       "summary": "글쓰기·검색·이미지·음성 대화까지 두루 쓰는 범용 AI 비서입니다. 무료로도 쓸 수 있고, 한국 요금 페이지에는 유료 요금제가 원화로 표시됩니다.",
       "streams": "개인 1인", "streams_max": 1,
       "plans": [
