@@ -496,6 +496,7 @@
       "official_url": "https://www.perplexity.ai/",
       "source_url": "https://www.perplexity.ai/hub/pricing", "source_note": "Perplexity 요금제 안내",
       "verified_at": "2026-09-30",
+      "price_hidden": "2026-10-19",
       "summary": "답변마다 출처를 달아 주는 AI 검색 서비스입니다. 무료로도 쓸 수 있고, Pro는 연간 결제가 저렴합니다.",
       "streams": "개인 1인", "streams_max": 1,
       "plans": [
