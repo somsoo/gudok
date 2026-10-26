@@ -4,6 +4,13 @@
 금액을 가린 서비스마다 서버가 읽은 공식 페이지와 그 페이지에서 보이지 않은 사이트 금액을 적는다.
 고치는 방법은 `.agents/skills/gudok-price-update/SKILL.md`에 있다. 고친 서비스의 항목은 지운다(안 지워도 다음 점검 때 서버가 정리한다).
 
+## 티빙 (`tving`): 요금이 바뀐 것 같음
+
+- 가린 날: 2026-10-26
+- 공식 페이지: https://www.tving.com/membership/tving
+- 공식 페이지에 보이지 않은 사이트 금액: 4,400원(watch)
+- 할 일: 공식 페이지에서 요금제별 금액을 확인해 `data/services.json`의 `tving` 블록을 고친다(SKILL.md 3~6단계).
+
 ## ChatGPT (`chatgpt`): 공식 페이지를 읽지 못함
 
 - 가린 날: 2026-10-12
