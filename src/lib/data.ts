@@ -39,6 +39,8 @@ export const VER = TODAY.replaceAll('-', '');
  *   watch·watch_usd 는 문장 속 금액이라 그 금액이 든 문장(요금제 설명은 ' · ' 조각, 할인 방법의 월 부담 칸은 칸 전체)을 뺀다.
  * 두 경우 모두 문장 속 가격 토큰은 문장이 깨지지 않도록 마지막으로 확인한 금액을 쓰고,
  * 요금제 금액을 가린 서비스는 페이지 안내(app.js initHiddenNote)가 결제 전 확인을 권한다.
+ * text_hidden: 서버가 바뀐 요금을 자동으로 고친 뒤 넣는다. {since, changed: 바뀐 요금[], amounts: 문장 속 금액 표기[]}
+ *   amounts('9,500원', '$16.7', '37%')가 든 문장은 사람이 새 요금에 맞게 고칠 때까지 사이트에서 뺀다(요금표 금액은 이미 새 값).
  * price_check:'none': 자동 점검 대상이 아니다(쿠팡플레이). 여러 서비스 페이지의 확인일 계산에서 뺀다.
  */
 type HiddenParts = { since?: string; plans?: string[]; watch?: number[]; watch_usd?: number[] };
@@ -64,12 +66,20 @@ function dropAmounts(s: Service, re: RegExp): void {
   for (const p of s.plans) if (p.feat) p.feat = p.feat.split(' · ').filter((x) => !re.test(x)).join(' · ');
   for (const d of s.discounts) {
     if (d.cost && re.test(d.cost)) d.cost = '공식 요금 확인';
+    if (d.cond && re.test(d.cond)) d.cond = '공식 페이지 확인';
     if (d.desc) d.desc = dropSentences(d.desc, re) || '금액과 조건은 공식 페이지에서 확인하세요.';
   }
   s.faq = (s.faq ?? []).filter((f: FaqItem) => !re.test(f.q)).map((f: FaqItem) => ({ ...f, a: dropSentences(f.a, re) }))
     .filter((f: FaqItem) => f.a);
 }
 const WON_FMT = new Intl.NumberFormat('en-US');
+/** text_hidden 금액 표기 하나를 찾는 식 (홈서버 watch.py lit_re 와 같은 규칙): '9,500원', '$16.7', '37%' */
+const litPattern = (lit: string): string => {
+  const m = lit.match(/^(\$)?([\d,]+(?:\.\d+)?)(원|%)?$/);
+  if (!m) return lit.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const num = m[2].replace(/[.,]/g, (c) => `\\${c}`);
+  return m[1] ? `\\$\\s?${num}(?!\\d|\\.\\d)` : `(?<![\\d,.])${num}(?!\\d|[,.]\\d)\\s?${m[3] ?? '원'}`;
+};
 for (const s of SERVICES) {
   const parts = partsOf(s);
   const names = new Set(parts.plans ?? []);
@@ -77,6 +87,7 @@ for (const s of SERVICES) {
   const alts = [
     ...(parts.watch ?? []).map((v) => `(?<![\\d,])${WON_FMT.format(v)}(?![\\d]|,\\d)\\s?원`),
     ...(parts.watch_usd ?? []).map((v) => `\\$\\s?${String(Number(v.toPrecision(6))).replace('.', '\\.')}(?![\\d]|\\.\\d)`),
+    ...((s.text_hidden?.amounts ?? []) as string[]).map(litPattern),
   ];
   if (alts.length) dropAmounts(s, new RegExp(alts.join('|')));
 }

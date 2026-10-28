@@ -78,6 +78,9 @@ for (const s of services) {
     warn.push(`일부 금액 가림 중(hidden_parts ${hp.since ?? ''}): ${s.id} / ${what} → 공식 요금을 확인해 고친 뒤 hidden_parts 를 지우세요.`);
     for (const n of hp.plans ?? []) if (!(s.plans ?? []).some((p) => p.name === n)) warn.push(`hidden_parts 의 요금제가 plans 에 없음: ${s.id} / ${n}`);
   }
+  if (s.text_hidden) {
+    warn.push(`요금 자동 반영 뒤 문장 정리 남음(text_hidden ${s.text_hidden.since ?? ''}): ${s.id} / ${(s.text_hidden.amounts ?? []).join(', ')} → 이 금액이 든 문장을 고친 뒤 text_hidden 을 지우세요.`);
+  }
 }
 
 console.log(`pages: ${pages.length} (indexable ${indexed.size}, noindex ${pages.length - indexed.size}) → ${DIST}`);
