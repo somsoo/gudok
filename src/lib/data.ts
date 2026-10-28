@@ -11,7 +11,7 @@ import affiliates from '../../data/affiliates.json';
 import copy from '../../data/copy.json';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export type Plan = { name: string; price?: number | null; usd?: number | null; app_price?: number; app_higher?: boolean; ads?: boolean; feat?: string; kind?: string; check?: boolean };
+export type Plan = { name: string; price?: number | null; usd?: number | null; app_price?: number; app_higher?: boolean; ads?: boolean; feat?: string; kind?: string; check?: boolean; hidden?: boolean };
 export type Discount = { type: string; title: string; cost?: string; cond?: string; stab?: string; desc: string; source?: string };
 export type Service = Record<string, any> & { id: string; cat: string; name: string; plans: Plan[]; discounts: Discount[] };
 export type Bundle = { id: string; name: string; price: number; href: string; cond: string; parts: [string, string][] };
@@ -30,30 +30,66 @@ export const BRAND: string = SITE.brand;
 export const TODAY: string = SITE.last_reviewed;
 export const VER = TODAY.replaceAll('-', '');
 
-// ---------------------------------------------------------------- 주간 점검 상태
+// ---------------------------------------------------------------- 점검 상태 (홈서버 gudok-watch 가 적는 값)
 /**
- * price_hidden: 홈서버 주간 점검(gudok-watch)이 공식 페이지에서 이 서비스의 금액을 확인하지 못한 날짜.
+ * price_hidden: 서비스 금액을 통째로 가린 날짜. 공식 페이지를 6주 넘게 읽지 못했을 때 서버가 넣고, 사람이 손으로 가릴 때도 쓴다.
  *   그 서비스의 요금표·카드·비교표·계산기에서는 금액을 빼고 '공식 요금 확인'으로 보여 준다.
- *   문장 속 가격 토큰은 문장이 깨지지 않도록 마지막으로 확인한 금액을 쓰고, 페이지 안내(app.js initHiddenNote)가 결제 전 확인을 권한다.
+ * hidden_parts: 공식 페이지에서 일부 금액만 보이지 않을 때 서버가 넣는다. {since, plans?: 요금제 이름[], watch?: 원[], watch_usd?: 달러[]}
+ *   plans 의 요금제만 금액을 빼고 나머지 요금제는 그대로 보여 준다. 가린 요금제가 최저가 후보에 있으면 '공식 최저' 칸도 가린다.
+ *   watch·watch_usd 는 문장 속 금액이라 그 금액이 든 문장(요금제 설명은 ' · ' 조각, 할인 방법의 월 부담 칸은 칸 전체)을 뺀다.
+ * 두 경우 모두 문장 속 가격 토큰은 문장이 깨지지 않도록 마지막으로 확인한 금액을 쓰고,
+ * 요금제 금액을 가린 서비스는 페이지 안내(app.js initHiddenNote)가 결제 전 확인을 권한다.
  * price_check:'none': 자동 점검 대상이 아니다(쿠팡플레이). 여러 서비스 페이지의 확인일 계산에서 뺀다.
  */
+type HiddenParts = { since?: string; plans?: string[]; watch?: number[]; watch_usd?: number[] };
+const partsOf = (s: Service): HiddenParts => (s.price_hidden ? {} : (s.hidden_parts as HiddenParts | undefined) ?? {});
 export const HIDDEN: Service[] = SERVICES.filter((s) => s.price_hidden);
-export const HIDDEN_NAMES: string[] = HIDDEN.map((s) => s.name);
 const LAST_CHECKED = new Map<Plan, Plan>();
+const hidePlan = (p: Plan): void => {
+  LAST_CHECKED.set(p, { ...p });
+  p.price = null;
+  p.usd = null;
+  p.hidden = true;
+};
 for (const s of HIDDEN) {
-  for (const p of s.plans) {
-    LAST_CHECKED.set(p, { ...p });
-    p.price = null;
-    p.usd = null;
-  }
+  s.plans.forEach(hidePlan);
   for (const d of s.discounts) if (d.cost && /\d/.test(d.cost)) d.cost = '공식 요금 확인';
 }
+const SENTENCE = /(?<=[.!?])\s+/;
+const dropSentences = (text: string, re: RegExp): string => text.split(SENTENCE).filter((x) => !re.test(x)).join(' ');
+/** 문장 속 금액(watch)을 공식 페이지에서 확인하지 못한 서비스: 그 금액이 든 문장만 뺀다. */
+function dropAmounts(s: Service, re: RegExp): void {
+  for (const k of ['summary', 'plans_note', 'sharing']) if (typeof s[k] === 'string') s[k] = dropSentences(s[k], re);
+  for (const k of Object.keys(s.quick ?? {})) s.quick[k] = dropSentences(s.quick[k], re) || '최신 요금은 공식 요금 페이지에서 확인하세요.';
+  for (const p of s.plans) if (p.feat) p.feat = p.feat.split(' · ').filter((x) => !re.test(x)).join(' · ');
+  for (const d of s.discounts) {
+    if (d.cost && re.test(d.cost)) d.cost = '공식 요금 확인';
+    if (d.desc) d.desc = dropSentences(d.desc, re) || '금액과 조건은 공식 페이지에서 확인하세요.';
+  }
+  s.faq = (s.faq ?? []).filter((f: FaqItem) => !re.test(f.q)).map((f: FaqItem) => ({ ...f, a: dropSentences(f.a, re) }))
+    .filter((f: FaqItem) => f.a);
+}
+const WON_FMT = new Intl.NumberFormat('en-US');
+for (const s of SERVICES) {
+  const parts = partsOf(s);
+  const names = new Set(parts.plans ?? []);
+  s.plans.filter((p) => names.has(p.name)).forEach(hidePlan);
+  const alts = [
+    ...(parts.watch ?? []).map((v) => `(?<![\\d,])${WON_FMT.format(v)}(?![\\d]|,\\d)\\s?원`),
+    ...(parts.watch_usd ?? []).map((v) => `\\$\\s?${String(Number(v.toPrecision(6))).replace('.', '\\.')}(?![\\d]|\\.\\d)`),
+  ];
+  if (alts.length) dropAmounts(s, new RegExp(alts.join('|')));
+}
+/** 요금제 금액을 가린 서비스(통째로든 일부든). 이 이름이 본문에 나오는 페이지에 안내를 띄운다. */
+export const HIDDEN_NAMES: string[] = SERVICES.filter((s) => s.price_hidden || s.plans.some((p) => p.hidden)).map((s) => s.name);
 /** 여러 서비스 가격이 함께 나오는 페이지의 기준일: 자동 점검 중인 서비스 가운데 가장 오래된 verified_at. 오래된 요금 안전장치(app.js initStale)가 쓴다. */
 export const verifiedOf = (list: Service[]): string => list.filter((s) => s.price_check !== 'none' && !s.price_hidden)
   .map((s) => s.verified_at).filter(Boolean).sort()[0] ?? TODAY;
 export const OLDEST_VERIFIED: string = verifiedOf(SERVICES);
-/** 결합 상품 표에 보여 줄 묶음: 가린 서비스가 들어간 묶음은 뺀다. */
-export const BUNDLES_SHOWN: Bundle[] = BUNDLE_LIST.filter((b) => !b.parts.some(([sid]) => SVC[sid]?.price_hidden));
+const HIDDEN_WATCH = new Set(SERVICES.flatMap((s) => partsOf(s).watch ?? []));
+/** 결합 상품 표에 보여 줄 묶음: 금액을 가린 요금제가 들어갔거나, 묶음 금액이 가린 문장 속 금액이면 뺀다. */
+export const BUNDLES_SHOWN: Bundle[] = BUNDLE_LIST.filter((b) => !HIDDEN_WATCH.has(b.price)
+  && !b.parts.some(([sid, pn]) => SVC[sid]?.price_hidden || SVC[sid]?.plans.some((p) => p.name === pn && p.hidden)));
 
 export const CAT_ORDER = ['ott', 'music', 'ai'];
 export const TYPE_LABEL: Record<string, string> = {
@@ -98,13 +134,19 @@ export function fmtPrice(p: Plan): string {
   let s: string;
   if (p.price != null) s = p.price === 0 ? '무료' : `월 ${nf(p.price)}원`;
   else if (p.usd != null) s = `월 $${fmtG(p.usd)} (약 ${nf(planKrw(p)!)}원)`;
+  else if (p.hidden) s = '공식 요금 확인';
   else s = '공식 페이지 확인';
   return s;
 }
 
 export const officialPlans = (s: Service): Plan[] => s.plans.filter((p) => p.kind !== 'bundle');
 
+/** 최저가 후보 요금제 가운데 금액을 가린 것이 있는지 */
+export const hasHidden = (s: Service, noAds = false): boolean => officialPlans(s).some((p) => p.hidden && !(noAds && p.ads));
+
+/** 가장 싼 요금제. 금액을 가린 요금제가 후보에 있으면 최저가를 말할 수 없으므로 null. */
 export function cheapest(s: Service, { paid = true, noAds = false } = {}): Plan | null {
+  if (hasHidden(s, noAds)) return null;
   let best: Plan | null = null;
   for (const p of officialPlans(s)) {
     const v = planKrw(p);
@@ -118,7 +160,7 @@ export const cellPrice = (p: Plan | null): string => (p ? `${p.name} · ${fmtPri
 
 /** 비교표·홈 표의 '공식 최저' 칸. 가린 서비스는 '공식 요금 확인', 금액을 적지 않은 유료 요금제만 있으면 '요금제 · 공식 페이지 확인'. */
 export function cheapestCell(s: Service, opts: { paid?: boolean; noAds?: boolean } = {}): string {
-  if (s.price_hidden) return '공식 요금 확인';
+  if (s.price_hidden || hasHidden(s, opts.noAds)) return '공식 요금 확인';
   const low = cheapest(s, opts);
   if (low) return cellPrice(low);
   const unpriced = officialPlans(s).find((p) => p.price == null && p.usd == null && (!opts.noAds || !p.ads));

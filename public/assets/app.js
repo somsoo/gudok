@@ -278,7 +278,7 @@
   // 오래된 요금 안전장치: <body data-verified="YYYY-MM-DD">로부터 STALE_DAYS가 지나면
   // 표·카드의 금액을 '공식 요금 확인'으로 바꾸고 제목 아래에 안내를 띄운다.
   // 재배포 없이 방문자 브라우저에서 동작하므로, 가격 확인이 끊겨도 틀린 금액이 그대로 나가지 않는다.
-  // 홈서버 주간 점검이 확인일을 약 4주(28일)마다 갱신하므로, 70일이 지났다면 갱신을 두 번 넘게 놓친 것이다
+  // 홈서버 점검이 확인일을 매주 갱신하고 6주 넘게 못 읽은 서비스는 스스로 가리므로, 70일이 지났다면 점검 자체가 멈춘 것이다
   // (서버 정지, push 권한 만료, GitHub 빌드 실패 등). 아무도 손대지 않아도 틀렸을 수 있는 금액이 70일 넘게 나가지 않는다.
   var STALE_DAYS = 70;
   var PRICE_RE = /[0-9][0-9,.]*\s*원|\$\s?[0-9]/;
@@ -317,8 +317,8 @@
     b.classList.add('stale');
   }
 
-  // 요금 변경 의심 안내: 홈서버 주간 점검이 공식 페이지에서 금액을 확인하지 못한 서비스(<body data-hidden-names>)는
-  // 빌드할 때 요금표·카드의 금액을 이미 뺐다. 그 서비스 이름이 본문에 나오는 페이지에만 안내를 띄운다.
+  // 요금 확인 실패 안내: 홈서버 점검이 공식 페이지에서 요금제 금액을 확인하지 못한 서비스(<body data-hidden-names>)는
+  // 빌드할 때 요금표·카드의 그 금액을 이미 뺐다. 그 서비스 이름이 본문에 나오는 페이지에만 안내를 띄운다.
   function initHiddenNote() {
     var b = document.body;
     if (b.classList.contains('stale')) return;  // 오래된 요금 안내가 이미 떠 있으면 겹쳐 띄우지 않는다
@@ -332,8 +332,8 @@
     var box = document.createElement('div');
     box.className = 'stale-note';
     box.setAttribute('role', 'note');
-    box.innerHTML = '<strong>요금이 바뀐 것으로 보입니다.</strong> ' + esc(hit.join(', ')) +
-      '의 요금이 공식 페이지와 달라 보여 표의 금액을 가렸습니다. ' +
+    box.innerHTML = '<strong>일부 요금을 확인하지 못했습니다.</strong> ' + esc(hit.join(', ')) +
+      '의 요금 가운데 공식 페이지에서 확인되지 않은 금액을 가렸습니다. ' +
       '본문에 적힌 금액은 바뀌기 전 요금일 수 있으니 결제 전에 공식 요금 페이지에서 확인하세요.' +
       (off ? ' <a href="' + esc(off) + '" rel="nofollow noopener" target="_blank">공식 요금 보기</a>' : '');
     var h1 = document.querySelector('#main h1');

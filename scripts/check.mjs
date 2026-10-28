@@ -72,6 +72,12 @@ for (const s of services) {
   }
   for (const p of s.plans ?? []) if (p.app_price != null) errors.push(`앱 결제 금액(app_price)은 적지 않습니다(app_higher 사용): ${s.id} / ${p.name}`);
   if (s.price_hidden) warn.push(`금액 가림 중(price_hidden ${s.price_hidden}): ${s.id} → 공식 요금을 확인해 고친 뒤 price_hidden 을 지우세요.`);
+  if (s.hidden_parts) {
+    const hp = s.hidden_parts;
+    const what = [...(hp.plans ?? []), ...(hp.watch ?? []).map((v) => `${v}원`), ...(hp.watch_usd ?? []).map((v) => `$${v}`)].join(', ');
+    warn.push(`일부 금액 가림 중(hidden_parts ${hp.since ?? ''}): ${s.id} / ${what} → 공식 요금을 확인해 고친 뒤 hidden_parts 를 지우세요.`);
+    for (const n of hp.plans ?? []) if (!(s.plans ?? []).some((p) => p.name === n)) warn.push(`hidden_parts 의 요금제가 plans 에 없음: ${s.id} / ${n}`);
+  }
 }
 
 console.log(`pages: ${pages.length} (indexable ${indexed.size}, noindex ${pages.length - indexed.size}) → ${DIST}`);
