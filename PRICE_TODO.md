@@ -4,4 +4,10 @@
 금액을 가린 서비스마다 서버가 읽은 공식 페이지와 그 페이지에서 보이지 않은 사이트 금액을 적는다.
 고치는 방법은 `.agents/skills/gudok-price-update/SKILL.md`에 있다. 고친 서비스의 항목은 지운다(안 지워도 다음 점검 때 서버가 정리한다).
 
-지금 가려 둔 서비스가 없습니다.
+## Gemini (`gemini`): 일부 금액이 공식 페이지에 안 보임
+
+- 가린 날: 2026-11-09
+- 공식 페이지: https://one.google.com/intl/ko/about/google-ai-plans/
+- 가린 금액(공식 페이지에 보이지 않음): 7,500원(Google AI Plus), 29,000원(Google AI Pro), 119,000원(Google AI Ultra 5x), 300,000원(Google AI Ultra 20x)
+- 그날 공식 페이지에 새로 보인 금액(힌트일 뿐이니 직접 확인): $146, $15.99, $19.99, $199.99, $26.99, $33.33, $35.98, $39
+- 할 일: 공식 페이지에서 확인해 `data/services.json`의 `gemini` 블록 금액을 고치고 `hidden_parts` 줄을 지운다(SKILL.md 3~6단계). 금액이 공식 페이지에 그대로 있는데 서버가 못 찾는 것이면 Kiro에게 넘긴다(서버 설정 문제).
