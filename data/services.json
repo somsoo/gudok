@@ -453,7 +453,7 @@
       "id": "gemini", "cat": "ai", "name": "Gemini", "short": "구글 서비스 연동·저장공간 포함",
       "official_url": "https://gemini.google.com/",
       "source_url": "https://one.google.com/intl/ko/about/google-ai-plans/", "source_note": "Google AI 요금제 안내",
-      "verified_at": "2026-11-12",
+      "verified_at": "2026-11-13",
       "hidden_parts": {"since": "2026-11-09", "plans": ["Google AI Plus", "Google AI Pro", "Google AI Ultra 5x", "Google AI Ultra 20x"]},
       "summary": "구글 계정·지메일·드라이브와 연동되는 AI 비서입니다. 유료 요금제인 Google AI Pro에는 Google One 저장공간이 함께 들어 있어, 이미 저장공간을 결제 중이라면 비용을 합칠 수 있습니다.",
       "streams": "개인 1인(저장공간은 가족 공유 가능)", "streams_max": 1,
